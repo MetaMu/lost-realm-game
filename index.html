@@ -1,13 +1,568 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Lost Realm</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div id="game"></div>
-  <script src="game.js"></script>
-</body>
-</html>
+import React, { useEffect, useRef, useState } from "react";
+
+/*
+UPGRADE PASS — The Lost Realm
+Major improvements:
+• Power evolutions now shift in 5-level blocks
+• Every 10 levels triggers a one-time spectacular screen clear
+• Player health reduced to 10 touches total
+• Full reset to level 1 on game over
+*/
+
+export default function ForestGnomeBrowserGame() {
+  const GAME_WIDTH = 980;
+  const GAME_HEIGHT = 620;
+  const PLAYER_SIZE = 120;
+  const STARTING_HEALTH = 10;
+  const MOVE_SPEED = 4.4;
+
+  const PLAYER_ART = "./gnome-main.png";
+  const ROOSTER_ART = "./rooster.png";
+  const WAVE_POINTS = 500;
+
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(0);
+  const [health, setHealth] = useState(STARTING_HEALTH);
+  const [highScore, setHighScore] = useState(() => {
+    const saved = localStorage.getItem("lost-realm-high-score");
+    return saved ? Number(saved) : 0;
+  });
+
+  const [player, setPlayer] = useState({
+    x: GAME_WIDTH / 2,
+    y: GAME_HEIGHT / 2,
+    facing: 1,
+  });
+
+  const [enemies, setEnemies] = useState([]);
+  const [projectiles, setProjectiles] = useState([]);
+  const [effects, setEffects] = useState([]);
+  const [titleFloat, setTitleFloat] = useState(0);
+  const [upgradeFlash, setUpgradeFlash] = useState(null);
+  const [lastMilestoneLevel, setLastMilestoneLevel] = useState(0);
+  const [touchFlash, setTouchFlash] = useState(0);
+
+  const animationRef = useRef(null);
+  const keys = useRef({});
+  const enemyId = useRef(0);
+  const projectileId = useRef(0);
+  const lastSpawn = useRef(0);
+  const lastFrame = useRef(0);
+  const lastCast = useRef(0);
+  const lastTouchTime = useRef(0);
+
+  const wave = Math.floor(score / WAVE_POINTS) + 1;
+  const level = Math.min(100, Math.floor(score / 250) + 1);
+  const powerTier = Math.floor((level - 1) / 5);
+
+  const enemySpeed = 0.75 + wave * 0.18;
+  const spawnRate = Math.max(320, 1500 - wave * 145);
+  const autoCastRate = Math.max(90, 430 - level * 2 - wave * 10);
+
+  function resetGame() {
+    setGameStarted(true);
+    setGameOver(false);
+    setScore(0);
+    setHealth(STARTING_HEALTH);
+    setEnemies([]);
+    setProjectiles([]);
+    setEffects([]);
+    setPlayer({ x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2, facing: 1 });
+    setTitleFloat(0);
+    setUpgradeFlash(null);
+    setLastMilestoneLevel(0);
+    setTouchFlash(0);
+    lastSpawn.current = 0;
+    lastFrame.current = 0;
+    lastCast.current = 0;
+    lastTouchTime.current = 0;
+  }
+
+  function spawnEnemy() {
+    enemyId.current += 1;
+    const side = Math.floor(Math.random() * 4);
+    let x = 0;
+    let y = 0;
+
+    if (side === 0) {
+      x = -40;
+      y = Math.random() * GAME_HEIGHT;
+    } else if (side === 1) {
+      x = GAME_WIDTH + 40;
+      y = Math.random() * GAME_HEIGHT;
+    } else if (side === 2) {
+      x = Math.random() * GAME_WIDTH;
+      y = -40;
+    } else {
+      x = Math.random() * GAME_WIDTH;
+      y = GAME_HEIGHT + 40;
+    }
+
+    return {
+      id: enemyId.current,
+      x,
+      y,
+      size: 70,
+    };
+  }
+
+  function castSpell(targetEnemy, allEnemies = []) {
+    if (!targetEnemy) return;
+
+    const staffOffsetX = player.facing === 1 ? 42 : -42;
+    const startX = player.x + staffOffsetX;
+    const startY = player.y - 15;
+
+    const spawnShot = (enemyTarget, config = {}) => {
+      if (!enemyTarget) return;
+      projectileId.current += 1;
+
+      const dx = enemyTarget.x - startX;
+      const dy = enemyTarget.y - startY;
+      const dist = Math.max(1, Math.hypot(dx, dy));
+
+      setProjectiles((prev) => [
+        ...prev,
+        {
+          id: projectileId.current,
+          x: startX,
+          y: startY,
+          vx: (dx / dist) * (config.speed || 9),
+          vy: (dy / dist) * (config.speed || 9),
+          size: config.size || 24,
+          life: config.life || 42,
+          chainDepth: config.chainDepth || 0,
+          pierce: config.pierce || 0,
+          splash: config.splash || 0,
+          style: config.style || "orb",
+        },
+      ]);
+    };
+
+    const targets = allEnemies.length ? allEnemies : [targetEnemy];
+
+    if (powerTier === 0) {
+      spawnShot(targetEnemy, { speed: 8.8, size: 20, style: "orb" });
+      return;
+    }
+    if (powerTier === 1) {
+      spawnShot(targetEnemy, { speed: 9.1, size: 22, style: "dual" });
+      spawnShot(targets[1] || targetEnemy, { speed: 9.1, size: 22, style: "dual" });
+      return;
+    }
+    if (powerTier === 2) {
+      spawnShot(targetEnemy, { speed: 9.5, size: 24, style: "lightning", chainDepth: 1 });
+      spawnShot(targets[1] || targetEnemy, { speed: 9.5, size: 24, style: "lightning", chainDepth: 1 });
+      return;
+    }
+    if (powerTier === 3) {
+      spawnShot(targetEnemy, { speed: 10.2, size: 28, style: "flare", splash: 90 });
+      return;
+    }
+    if (powerTier === 4) {
+      for (let i = 0; i < 3; i += 1) {
+        spawnShot(targets[i] || targetEnemy, { speed: 10.2 + i * 0.2, size: 24, style: "triad", chainDepth: 1 });
+      }
+      return;
+    }
+    if (powerTier === 5) {
+      for (let i = 0; i < 4; i += 1) {
+        spawnShot(targets[i] || targetEnemy, { speed: 10.5, size: 26, style: "storm", pierce: 1, splash: 70 });
+      }
+      return;
+    }
+    if (powerTier === 6) {
+      for (let i = 0; i < 5; i += 1) {
+        spawnShot(targets[i] || targetEnemy, { speed: 10.8, size: 30, style: "beam", pierce: 1, chainDepth: 1, splash: 80 });
+      }
+      return;
+    }
+    if (powerTier === 7) {
+      for (let i = 0; i < 6; i += 1) {
+        spawnShot(targets[i] || targetEnemy, { speed: 11.2, size: 32, style: "nova", pierce: 2, splash: 120, chainDepth: 2, life: 52 });
+      }
+      return;
+    }
+    if (powerTier === 8) {
+      for (let i = 0; i < 7; i += 1) {
+        spawnShot(targets[i] || targetEnemy, { speed: 11.5, size: 34, style: "spore", pierce: 2, splash: 135, chainDepth: 2, life: 56 });
+      }
+      return;
+    }
+
+    for (let i = 0; i < Math.min(10, 4 + powerTier); i += 1) {
+      spawnShot(targets[i] || targetEnemy, { speed: 12 + i * 0.08, size: 36, style: "apocalypse", pierce: 3, splash: 160, chainDepth: 3, life: 60 });
+    }
+  }
+
+  useEffect(() => {
+    localStorage.setItem("lost-realm-high-score", String(highScore));
+  }, [highScore]);
+
+  useEffect(() => {
+    const keyDown = (e) => {
+      keys.current[e.code] = true;
+      if (e.code === "Space") {
+        e.preventDefault();
+        if (!gameStarted || gameOver) resetGame();
+      }
+    };
+
+    const keyUp = (e) => {
+      keys.current[e.code] = false;
+    };
+
+    window.addEventListener("keydown", keyDown);
+    window.addEventListener("keyup", keyUp);
+
+    return () => {
+      window.removeEventListener("keydown", keyDown);
+      window.removeEventListener("keyup", keyUp);
+    };
+  }, [gameStarted, gameOver]);
+
+  useEffect(() => {
+    const animate = (time) => {
+      if (!lastFrame.current) lastFrame.current = time;
+      const delta = (time - lastFrame.current) / 16;
+      lastFrame.current = time;
+
+      if (gameStarted && !gameOver) {
+        const k = keys.current;
+
+        setPlayer((p) => {
+          let x = p.x;
+          let y = p.y;
+          let facing = p.facing;
+
+          if (k.KeyA || k.ArrowLeft) {
+            x -= MOVE_SPEED * delta;
+            facing = -1;
+          }
+          if (k.KeyD || k.ArrowRight) {
+            x += MOVE_SPEED * delta;
+            facing = 1;
+          }
+          if (k.KeyW || k.ArrowUp) y -= MOVE_SPEED * delta;
+          if (k.KeyS || k.ArrowDown) y += MOVE_SPEED * delta;
+
+          x = Math.max(40, Math.min(GAME_WIDTH - 40, x));
+          y = Math.max(60, Math.min(GAME_HEIGHT - 40, y));
+
+          return { x, y, facing };
+        });
+
+        setTitleFloat((t) => t + 0.04 * delta);
+
+        if (time - lastSpawn.current > spawnRate) {
+          lastSpawn.current = time;
+          setEnemies((e) => [...e, spawnEnemy()]);
+        }
+
+        const sortedTargets = enemies
+          .slice()
+          .sort((a, b) => Math.hypot(a.x - player.x, a.y - player.y) - Math.hypot(b.x - player.x, b.y - player.y));
+
+        const target = sortedTargets[0];
+        if (target && time - lastCast.current > autoCastRate) {
+          lastCast.current = time;
+          castSpell(target, sortedTargets);
+        }
+
+        if (level % 10 === 0 && level > 0 && level !== lastMilestoneLevel) {
+          setLastMilestoneLevel(level);
+          setUpgradeFlash({ life: 60, label: `LEVEL ${level} ASCENSION` });
+          setEffects((fx) => [
+            ...fx,
+            { x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2, life: 60, size: 1400, type: "screenPulse" },
+            { x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2, life: 40, size: 900, type: "ascensionRing" },
+          ]);
+          setEnemies([]);
+        }
+
+        setProjectiles((p) =>
+          p
+            .map((pr) => ({
+              ...pr,
+              x: pr.x + pr.vx * delta,
+              y: pr.y + pr.vy * delta,
+              life: pr.life - 1,
+            }))
+            .filter((pr) => pr.x > -100 && pr.x < GAME_WIDTH + 100 && pr.y > -100 && pr.y < GAME_HEIGHT + 100 && pr.life > 0)
+        );
+
+        setEnemies((prev) => {
+          const updated = [];
+          const hitProjectileIds = new Set();
+          const splashOrigins = [];
+
+          for (const e of prev) {
+            const dx = player.x - e.x;
+            const dy = player.y - e.y;
+            const dist = Math.max(1, Math.hypot(dx, dy));
+            const nx = e.x + (dx / dist) * enemySpeed * delta;
+            const ny = e.y + (dy / dist) * enemySpeed * delta + Math.sin(time / 120 + e.id) * 0.4;
+
+            let gotHit = false;
+            let hitProjectile = null;
+
+            for (const p of projectiles) {
+              const hit = Math.hypot(p.x - nx, p.y - ny);
+              if (hit < 42 + p.size * 0.12) {
+                gotHit = true;
+                hitProjectile = p;
+                if (p.pierce <= 0) hitProjectileIds.add(p.id);
+                break;
+              }
+            }
+
+            if (gotHit) {
+              setScore((s) => {
+                const next = s + 25;
+                setHighScore((h) => Math.max(h, next));
+                return next;
+              });
+
+              const splashType =
+                hitProjectile?.style === "lightning" || hitProjectile?.style === "beam"
+                  ? "lightningBurst"
+                  : hitProjectile?.style === "flare" || hitProjectile?.style === "nova"
+                  ? "flareBurst"
+                  : "burst";
+
+              setEffects((fx) => [
+                ...fx,
+                { x: nx, y: ny, life: 22, size: 54, type: "hit" },
+                { x: nx, y: ny, life: 32, size: Math.max(82, hitProjectile?.splash || 82), type: splashType },
+              ]);
+
+              if (hitProjectile?.splash || hitProjectile?.chainDepth > 0) {
+                splashOrigins.push({ x: nx, y: ny, radius: Math.max(120, hitProjectile?.splash || 120), style: splashType });
+              }
+              continue;
+            }
+
+            const contact = Math.hypot(nx - player.x, ny - player.y);
+            if (contact < 58) {
+              if (time - lastTouchTime.current > 450) {
+                lastTouchTime.current = time;
+                setTouchFlash(10);
+                setHealth((h) => {
+                  const next = Math.max(0, h - 1);
+                  if (next <= 0) {
+                    setGameOver(true);
+                    setHighScore((best) => Math.max(best, score));
+                  }
+                  return next;
+                });
+              }
+              continue;
+            }
+
+            updated.push({ ...e, x: nx, y: ny });
+          }
+
+          let finalEnemies = updated;
+          if (splashOrigins.length) {
+            finalEnemies = updated.filter((enemy) => {
+              const inBlast = splashOrigins.some((origin) => Math.hypot(enemy.x - origin.x, enemy.y - origin.y) < origin.radius);
+              if (inBlast) {
+                setScore((s) => {
+                  const next = s + 25;
+                  setHighScore((h) => Math.max(h, next));
+                  return next;
+                });
+                setEffects((fx) => [...fx, { x: enemy.x, y: enemy.y, life: 26, size: 74, type: level >= 10 ? "lightningBurst" : "burst" }]);
+                return false;
+              }
+              return true;
+            });
+          }
+
+          if (hitProjectileIds.size) {
+            setProjectiles((prevProjectiles) => prevProjectiles.filter((p) => !hitProjectileIds.has(p.id)));
+          }
+
+          return finalEnemies;
+        });
+
+        setEffects((fx) => fx.map((f) => ({ ...f, life: f.life - 1 })).filter((f) => f.life > 0));
+        setTouchFlash((value) => Math.max(0, value - 1));
+        setUpgradeFlash((current) => {
+          if (!current) return null;
+          if (current.life <= 1) return null;
+          return { ...current, life: current.life - 1 };
+        });
+      }
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationRef.current);
+  }, [gameStarted, gameOver, enemies, player, projectiles, score, level, wave, autoCastRate, spawnRate, enemySpeed, powerTier, lastMilestoneLevel, highScore]);
+
+  return (
+    <div className="min-h-screen bg-[#0d120c] text-white flex items-center justify-center">
+      <div className="w-full max-w-7xl grid grid-cols-[1.3fr_320px] gap-6">
+        <div className="bg-black/40 rounded-3xl border border-lime-300/10 overflow-hidden">
+          <div className="flex justify-between px-6 py-4 border-b border-lime-300/10">
+            <div>
+              <div className="text-xs tracking-[0.4em] text-lime-400">SURVIVAL REALM</div>
+              <div className="text-3xl font-bold">The Lost Realm</div>
+            </div>
+            <div className="flex gap-3 flex-wrap justify-end">
+              <div className="bg-white/10 px-4 py-2 rounded-xl">Score: {score}</div>
+              <div className="bg-white/10 px-4 py-2 rounded-xl">High: {highScore}</div>
+              <div className="bg-white/10 px-4 py-2 rounded-xl">Level: {level}</div>
+              <div className="bg-white/10 px-4 py-2 rounded-xl">Wave: {wave}</div>
+              <div className="bg-white/10 px-4 py-2 rounded-xl">HP: {health}/10</div>
+            </div>
+          </div>
+
+          <div
+            className="relative"
+            style={{
+              width: GAME_WIDTH,
+              height: GAME_HEIGHT,
+              backgroundColor: "#15120f",
+              backgroundImage:
+                "linear-gradient(0deg, rgba(0,0,0,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.18) 1px, transparent 1px), linear-gradient(180deg, #2b221d 0%, #1e1814 100%)",
+              backgroundSize: "32px 32px, 32px 32px, 100% 100%",
+              boxShadow: touchFlash > 0 ? "inset 0 0 0 4px rgba(255,70,70,0.45)" : "inset 0 0 0 1px rgba(255,255,255,0.03)",
+            }}
+          >
+            <div className="absolute w-full top-8 flex justify-center">
+              <div
+                className="bg-black/40 border border-lime-300/20 px-8 py-2 rounded-full"
+                style={{ transform: `translateY(${Math.sin(titleFloat) * 8}px)` }}
+              >
+                Hold the center. Survive the brick dungeon and evolve your magic.
+              </div>
+            </div>
+
+            <div
+              className="absolute"
+              style={{
+                left: player.x - PLAYER_SIZE / 2,
+                top: player.y - PLAYER_SIZE / 2,
+                width: PLAYER_SIZE,
+                height: PLAYER_SIZE,
+                transform: `scaleX(${player.facing})`,
+              }}
+            >
+              <img src={PLAYER_ART} className="w-full h-full object-contain" alt="Gnome hero" />
+            </div>
+
+            {projectiles.map((p) => (
+              <div
+                key={p.id}
+                className="absolute pointer-events-none"
+                style={{ left: p.x - p.size / 2, top: p.y - p.size / 2, width: p.size, height: p.size }}
+              >
+                {p.style === "lightning" || p.style === "beam" ? (
+                  <>
+                    <div className="absolute inset-0 rounded-full bg-cyan-300 blur-[4px] animate-pulse" />
+                    <div className="absolute inset-[28%] rounded-full bg-white/90" />
+                    <div className="absolute left-1/2 top-1/2 w-12 h-1 -translate-y-1/2 -translate-x-full bg-cyan-100/80 skew-x-[-30deg]" />
+                  </>
+                ) : p.style === "flare" || p.style === "nova" ? (
+                  <>
+                    <div className="absolute inset-0 rounded-full bg-fuchsia-400 blur-[5px] animate-pulse" />
+                    <div className="absolute inset-[20%] rounded-full bg-amber-100/90" />
+                    <div className="absolute inset-[-20%] rounded-full border border-fuchsia-200/70" />
+                  </>
+                ) : p.style === "spore" || p.style === "apocalypse" ? (
+                  <>
+                    <div className="absolute inset-0 rounded-full bg-lime-300 blur-[6px] animate-pulse" />
+                    <div className="absolute inset-[18%] rounded-full bg-emerald-100/90" />
+                    <div className="absolute inset-[-10%] rounded-full border border-lime-100/40" />
+                  </>
+                ) : (
+                  <>
+                    <div className="absolute inset-0 rounded-full bg-lime-300 blur-[3px] animate-pulse" />
+                    <div className="absolute inset-[22%] rounded-full bg-white/80" />
+                    <div className="absolute left-1/2 top-1/2 h-2 -translate-y-1/2 -translate-x-full rounded-full bg-lime-200/50" style={{ width: 28 }} />
+                  </>
+                )}
+              </div>
+            ))}
+
+            {enemies.map((e) => (
+              <div key={e.id} className="absolute" style={{ left: e.x - e.size / 2, top: e.y - e.size / 2, width: e.size, height: e.size }}>
+                <img src={ROOSTER_ART} className="w-full h-full object-contain" alt="Rooster enemy" />
+              </div>
+            ))}
+
+            {effects.map((f, i) => (
+              <div
+                key={i}
+                className={`absolute rounded-full ${f.type === "lightningBurst" ? "bg-cyan-200/55" : f.type === "flareBurst" ? "bg-fuchsia-300/45" : f.type === "screenPulse" ? "bg-violet-200/16" : f.type === "ascensionRing" ? "bg-yellow-100/10 border border-yellow-200/45" : f.type === "burst" ? "bg-lime-200/40" : "bg-white/70"}`}
+                style={{
+                  left: f.x - f.size / 2,
+                  top: f.y - f.size / 2,
+                  width: f.size,
+                  height: f.size,
+                  opacity: f.life / (f.type === "screenPulse" ? 60 : f.type === "ascensionRing" ? 40 : f.type === "burst" ? 32 : 22),
+                  transform: `scale(${1 + (1 - f.life / (f.type === "screenPulse" ? 60 : f.type === "ascensionRing" ? 40 : f.type === "burst" ? 32 : 22)) * 1.2})`,
+                  filter: f.type === "ascensionRing" ? "blur(0px)" : "blur(6px)",
+                }}
+              />
+            ))}
+
+            {upgradeFlash && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div
+                  className="px-10 py-5 rounded-full border border-violet-200/30 bg-violet-300/10 text-violet-50 text-4xl font-black tracking-[0.18em]"
+                  style={{ opacity: upgradeFlash.life / 60, transform: `scale(${1 + (1 - upgradeFlash.life / 60) * 0.18})` }}
+                >
+                  {upgradeFlash.label}
+                </div>
+              </div>
+            )}
+
+            {!gameStarted && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                <button onClick={resetGame} className="bg-lime-400 text-black px-8 py-3 rounded-xl font-bold">
+                  Enter The Lost Realm
+                </button>
+              </div>
+            )}
+
+            {gameOver && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+                <div className="text-center bg-black/55 border border-red-300/15 rounded-3xl px-8 py-8">
+                  <div className="text-xs tracking-[0.35em] text-red-300/70 mb-2">REALM FALLEN</div>
+                  <div className="text-4xl font-black mb-3">Back To Level One</div>
+                  <div className="text-stone-300 mb-1">Final Score: {score}</div>
+                  <div className="text-stone-300 mb-5">Highest Score: {highScore}</div>
+                  <button onClick={resetGame} className="bg-red-400 text-black px-8 py-3 rounded-xl font-bold">
+                    Start New Run
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="bg-black/40 rounded-3xl border border-lime-300/10 p-6">
+          <h3 className="text-xl font-bold mb-4">Realm Notes</h3>
+          <ul className="space-y-3 text-sm text-gray-300">
+            <li>🧱 Powers now shift in stronger 5-level evolution blocks</li>
+            <li>⚡ Every 10 levels triggers a spectacular one-time full screen clear</li>
+            <li>❤️ Your gnome can only take 10 touches before the run ends</li>
+            <li>🔁 Game over now means a full restart back to level 1</li>
+          </ul>
+          <div className="mt-6 text-sm text-gray-400">
+            Move: WASD / Arrows
+            <br />
+            Survive: 10 hits max
+            <br />
+            Evolution: every 5 levels
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
