@@ -1,18 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>The Lost Realm</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Lost Realm</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <div class="page">
+    <div class="hud">
+      <div>
+        <div class="eyebrow">SURVIVAL REALM</div>
+        <h1>The Lost Realm</h1>
+      </div>
 
-<h1 class="title">The Lost Realm</h1>
+      <div class="stats">
+        <div class="pill">Score: <span id="score">0</span></div>
+        <div class="pill">High: <span id="highScore">0</span></div>
+        <div class="pill">Level: <span id="level">1</span></div>
+        <div class="pill">Wave: <span id="wave">1</span></div>
+        <div class="pill">HP: <span id="hp">10</span>/10</div>
+      </div>
+    </div>
 
-<canvas id="game" width="900" height="600"></canvas>
+    <div id="arenaWrap">
+      <canvas id="game" width="980" height="620"></canvas>
 
-<script src="game.js"></script>
+      <div id="floatingTitle">Hold the center. Survive the brick dungeon and evolve your magic.</div>
 
+      <div id="startOverlay" class="overlay show">
+        <div class="panel">
+          <div class="smallLabel">THE LOST REALM</div>
+          <h2>Enter The Dungeon</h2>
+          <p>Move with WASD or Arrow Keys. Your gnome auto-attacks. Survive as long as possible.</p>
+          <button id="startBtn">Start Run</button>
+        </div>
+      </div>
+
+      <div id="upgradeOverlay" class="overlay">
+        <div class="bigFlash" id="upgradeText">LEVEL 10 ASCENSION</div>
+      </div>
+
+      <div id="gameOverOverlay" class="overlay">
+        <div class="panel">
+          <div class="smallLabel danger">REALM FALLEN</div>
+          <h2>Back To Level One</h2>
+          <p>Final Score: <span id="finalScore">0</span></p>
+          <p>Highest Score: <span id="finalHighScore">0</span></p>
+          <button id="restartBtn">Start New Run</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h3>Realm Notes</h3>
+      <ul>
+        <li>🧱 Pixel brick dungeon arena</li>
+        <li>⚡ Power shifts every 5 levels</li>
+        <li>💥 Every 10 levels triggers a full screen clear</li>
+        <li>❤️ You only get 10 touches before the run ends</li>
+        <li>🔁 Game over resets back to level 1</li>
+      </ul>
+      <p>Move: WASD / Arrows</p>
+      <p>Attack: Auto-cast</p>
+    </aside>
+  </div>
+
+  <script src="game.js"></script>
 </body>
 </html>
