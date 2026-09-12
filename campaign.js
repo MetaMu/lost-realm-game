@@ -8,7 +8,7 @@
  const baseStats=K.stats;K.stats=t=>{const s=baseStats(t);if(t.type==='lady'||t.type==='phil')s.interval=K.TYPES[t.type].interval;return s;};
  const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
  class CampaignGame extends Base {
-  reset(){super.reset();this.allies=[];this.conversions=[];this.shadowHits=[];this.ultimate=null;this.ultimateCooldown=0;}
+  reset(){super.reset();this.allies=[];this.conversions=[];this.shadowHits=[];this.ultimate=null;this.ultimateCooldown=0;this.freezeUsed=false;this.freezeUntil=0;}
   place(type,pad){const t=super.place(type,pad);if(t&&(type==='lady'||type==='phil'))t.cooldown=K.TYPES[type].interval;return t;}
   target(t){if(t.type==='lady')return this.enemies.find(e=>e.hp>0&&e.mutated&&e.kind!=='boss'&&!this.conversions.some(c=>c.target===e)&&dist(t,e)<=K.stats(t).range);if(t.type==='phil'&&this.shadowHits.length)return null;return super.target(t);}
   fire(t,e){
@@ -16,8 +16,9 @@
    if(t.type==='phil'){this.enemies.filter(a=>a.hp>0&&dist(a,t)<=K.stats(t).range).sort(t.targetMode==='strongest'?(a,b)=>b.hp-a.hp:(a,b)=>b.progress-a.progress).slice(0,3).forEach((target,i)=>this.shadowHits.push({owner:t,target,left:.25+i*.65}));t.castStart=this.time;t.castUntil=this.time+2.2;return;}
    super.fire(t,e);
   }
-  summonReno(){const alive=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.gold<2500||this.ultimate||this.ultimateCooldown>0||!alive.length)return false;
-   this.gold-=2500;this.ultimateCooldown=45;this.ultimate={age:0,life:4.5,targets:alive.sort((a,b)=>b.progress-a.progress).slice(0,Math.ceil(alive.length/2)),hit:new Set()};this.emit('ultimateStart');return true;}
+  freezeKnowME(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.stage!==1||this.wave!==1||this.freezeUsed||this.ultimate||!this.towers.some(t=>t.type==='knowme')||!targets.length)return false;this.freezeUsed=true;this.freezeUntil=this.time+5;for(const e of targets)e.frozenUntil=this.freezeUntil;this.emit('cast',{power:'knowme'});return true;}
+  summonReno(){const alive=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.gold<1500||this.ultimate||this.ultimateCooldown>0||!alive.length)return false;
+   this.gold-=1500;this.ultimateCooldown=45;this.ultimate={age:0,life:4.5,targets:alive.sort((a,b)=>b.progress-a.progress).slice(0,Math.ceil(alive.length/2)),hit:new Set()};this.emit('ultimateStart');return true;}
   update(dt){dt=Math.max(0,Math.min(.05,dt));
    if(this.ultimate){const u=this.ultimate;u.age+=dt;if(u.age>=2){const reach=Math.min(1,(u.age-2)/2)*K.pathLength;for(const e of u.targets)if(!u.hit.has(e.id)&&e.progress<=reach){u.hit.add(e.id);this.hurt(e,e.hp,null,true);this.effects.push({kind:'thorns',x:e.x,y:e.y-20,color:'#9aff75',life:.8,age:0});}}if(u.age>=u.life){this.ultimate=null;this.enemies=this.enemies.filter(e=>e.hp>0);}return;}
    if(this.status!=='wave'){super.update(dt);return;}

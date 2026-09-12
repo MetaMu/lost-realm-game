@@ -31,7 +31,7 @@
     const count = 7+n*2+(stage>=2?8:0), entries=[];
     for(let i=0;i<count;i++) entries.push({at:i*Math.max(.35,1.13-n*.035-(stage>=2?.2:0)),kind:n>=5&&i%5===4?'brute':n>=5&&i%6===3?'venom':n>=3&&i%4===2?'runner':'scout'});
     if(n===6||n===12||n===stageWaves(stage)||(stage>=2&&n%5===0))entries.push({at:count*.8,kind:'boss'});
-    return entries.sort((a,b)=>a.at-b.at);
+    return entries.map(e=>({...e,at:e.at*1.1})).sort((a,b)=>a.at-b.at);
   }
   const distance = (a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
   const stats = t=>({damage:TYPES[t.type].damage*(1+(t.level-1)*.55),range:TYPES[t.type].range+(t.level-1)*18,interval:TYPES[t.type].interval/((t.type==='lady'||t.type==='phil')?1:1+(t.level-1)*.12)});
@@ -87,8 +87,8 @@
       for(const e of this.enemies){
         if(e.hp<=0)continue;if(e.poisonUntil>this.time)this.hurt(e,e.poisonDps*dt*(e.kind==='venom'?.25:1),e.poisonOwner,true);if(e.hp<=0)continue;
         e.enraged=e.kind==='brute'&&e.hp<e.maxHp*.5;
-        e.progress+=e.speed*dt*(e.enraged?1.4:1)*(e.slowUntil>this.time?1-e.slow:1);Object.assign(e,position(e.progress));
-        if(e.kind==='venom'&&e.progress<pathLength){e.attackCooldown=(e.attackCooldown||0)-dt;const victim=this.towers.filter(t=>distance(e,t)<=155).sort((a,b)=>distance(e,a)-distance(e,b))[0];if(victim){victim.hp=Math.max(0,victim.hp-(e.mutated?27:18)*.25/1.3*dt);if(e.attackCooldown<=0){e.attackCooldown=1.3;this.effects.push({kind:'lightning',x:e.x,y:e.y-35,tx:victim.x,ty:victim.y-55,color:'#89ff43',life:.45,age:0});}this.emit('towerHit',{tower:victim});if(victim.hp===0){this.towers=this.towers.filter(t=>t!==victim);this.projectiles=this.projectiles.filter(p=>p.owner!==victim);this.effects.push({kind:'cannon',x:victim.x,y:victim.y-30,radius:45,color:'#89ff43',life:.8,age:0});this.emit('towerDestroyed',{tower:victim});}}}
+        e.progress+=(e.frozenUntil>this.time?0:e.speed)*dt*(e.enraged?1.4:1)*(e.slowUntil>this.time?1-e.slow:1);Object.assign(e,position(e.progress));
+        if(e.kind==='venom'&&!(e.frozenUntil>this.time)&&e.progress<pathLength){e.attackCooldown=(e.attackCooldown||0)-dt;const victim=this.towers.filter(t=>distance(e,t)<=155).sort((a,b)=>distance(e,a)-distance(e,b))[0];if(victim){victim.hp=Math.max(0,victim.hp-(e.mutated?27:18)*.25/1.3*dt);if(e.attackCooldown<=0){e.attackCooldown=1.3;this.effects.push({kind:'lightning',x:e.x,y:e.y-35,tx:victim.x,ty:victim.y-55,color:'#89ff43',life:.45,age:0});}this.emit('towerHit',{tower:victim});if(victim.hp===0){this.towers=this.towers.filter(t=>t!==victim);this.projectiles=this.projectiles.filter(p=>p.owner!==victim);this.effects.push({kind:'cannon',x:victim.x,y:victim.y-30,radius:45,color:'#89ff43',life:.8,age:0});this.emit('towerDestroyed',{tower:victim});}}}
         if(e.progress>=pathLength){e.hp=0;this.lives=Math.max(0,this.lives-e.leak);this.waveLeaks+=e.leak;this.emit('leak',{amount:e.leak});}
       }
       if(this.lives<=0){this.status='lost';this.emit('lost');return;}
