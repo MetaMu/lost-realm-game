@@ -98,7 +98,7 @@
       this.enemies=this.enemies.filter(e=>e.hp>0);
       if(!this.queue.length&&!this.enemies.length){
         const milestone=this.stage===1?(this.wave===5?500:this.wave===10?1000:0):0;const bonus=35+this.wave*5+milestone;this.lastClear={wave:this.wave,stage:this.stage,bonus,milestone};this.gold+=bonus;this.projectiles=[];this.effects=[];
-        if(this.wave===stageWaves(this.stage)&&this.stage<3){this.stage++;this.wave=0;this.lives=Math.min(20,this.lives+8);this.gold+=250;this.status='build';this.emit('stage');}
+        if(this.wave===stageWaves(this.stage)&&this.stage<3){this.stage++;this.wave=0;this.towers=[];this.lives=Math.min(20,this.lives+8);this.gold+=250;this.status='build';this.emit('stage');}
         else{this.status=this.wave===stageWaves(this.stage)?'won':'build';this.emit(this.status==='won'?'won':'cleared',{bonus,milestone,perfect:this.waveLeaks===0});}
       }
     }

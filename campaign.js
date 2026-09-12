@@ -16,7 +16,7 @@
    if(t.type==='phil'){this.enemies.filter(a=>a.hp>0&&dist(a,t)<=K.stats(t).range).sort(t.targetMode==='strongest'?(a,b)=>b.hp-a.hp:(a,b)=>b.progress-a.progress).slice(0,3).forEach((target,i)=>this.shadowHits.push({owner:t,target,left:.25+i*.65}));t.castStart=this.time;t.castUntil=this.time+2.2;return;}
    super.fire(t,e);
   }
-  freezeKnowME(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.stage!==1||this.freezeUsed||this.ultimate||!this.towers.some(t=>t.type==='knowme')||!targets.length)return false;this.freezeUsed=true;this.freezeUntil=this.time+5;for(const e of targets)e.frozenUntil=this.freezeUntil;this.emit('cast',{power:'knowme'});return true;}
+  freezeKnowME(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.freezeUsed||this.ultimate||!this.towers.some(t=>t.type==='knowme')||!targets.length)return false;this.freezeUsed=true;this.freezeUntil=this.time+5;for(const e of targets)e.frozenUntil=this.freezeUntil;this.emit('cast',{power:'knowme'});return true;}
   summonReno(){const alive=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.gold<1500||this.ultimate||this.ultimateCooldown>0||!alive.length)return false;
    this.gold-=1500;this.ultimateCooldown=45;this.ultimate={age:0,life:4.5,targets:alive.sort((a,b)=>b.progress-a.progress).slice(0,Math.ceil(alive.length/2)),hit:new Set()};this.emit('ultimateStart');return true;}
   update(dt){dt=Math.max(0,Math.min(.05,dt));
@@ -31,7 +31,8 @@
    const engaged=[];
    for(const a of this.allies){if(a.hp<=0)continue;const target=this.enemies.filter(e=>e.hp>0).sort((x,y)=>dist(a,x)-dist(a,y))[0];if(!target)continue;const delta=target.progress-a.progress;a.progress+=Math.sign(delta)*Math.min(Math.abs(delta),100*dt);Object.assign(a,K.position(a.progress));a.cooldown-=dt;a.inCombat=dist(a,target)<38;if(a.inCombat){if(!engaged.some(p=>p[0]===target)){engaged.push([target,target.speed]);target.speed=0;}a.hp-=dt*(target.kind==='boss'?80:target.kind==='brute'?40:22);if(a.cooldown<=0){a.cooldown=.8;this.hurt(target,a.damage,a.owner);this.effects.push({kind:'thorns',x:target.x,y:target.y-25,color:'#b7ff80',life:.4,age:0});}}}
    this.allies=this.allies.filter(a=>a.hp>0);
-   super.update(dt);for(const [e,speed] of engaged)e.speed=speed;
+   const previousStage=this.stage;super.update(dt);for(const [e,speed] of engaged)e.speed=speed;
+   if(this.stage!==previousStage){this.freezeUsed=false;this.freezeUntil=0;this.allies=[];this.conversions=[];this.shadowHits=[];}
    if(this.status==='build'||this.status==='won'||this.status==='lost'){this.conversions=[];this.shadowHits=[];}
   }
  }

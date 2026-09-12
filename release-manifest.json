@@ -8,8 +8,8 @@
     },
     {
       "file": "index.html",
-      "bytes": 7070,
-      "sha256": "7b7179110ec9dc025d08b1dc268ea8b26a0a005a482709b8ed0ee1e24d424143"
+      "bytes": 7152,
+      "sha256": "d8c92217005927d6b278310f7b032c5bbb4c8ff1392e8fca64a43edc40a62972"
     },
     {
       "file": "style.css",
@@ -23,13 +23,13 @@
     },
     {
       "file": "core.js",
-      "bytes": 11588,
-      "sha256": "05eeb57496394584a609730b7ce57257982badde3256f2ef2250b1eaeba299ce"
+      "bytes": 11603,
+      "sha256": "c1a85567d2a6d5b8d0cceee29f00ec06f25d77a3c7d1cf099c1e2ef9cf19b65e"
     },
     {
       "file": "game.js",
-      "bytes": 19942,
-      "sha256": "448c4c7649cae9fa58595e68ffa1744075e8189abe4224572fb8386076dc38a7"
+      "bytes": 20162,
+      "sha256": "c8d15804e561469b871666aba60bb633b05fd18687bd4ef19053c00665ec7a87"
     },
     {
       "file": "sprite.js",
@@ -48,8 +48,8 @@
     },
     {
       "file": "campaign.js",
-      "bytes": 5814,
-      "sha256": "2e0bc21a864f7757608d76b280fe9ac918bca73268844e439584a8617410e6a9"
+      "bytes": 5960,
+      "sha256": "dc339c1b86f444f50f3fc47ef42f0dd0ed5b4d1a0c6c986696f9633b5c37628d"
     },
     {
       "file": "campaign-vfx.js",
