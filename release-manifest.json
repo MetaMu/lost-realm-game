@@ -23,8 +23,8 @@
     },
     {
       "file": "core.js",
-      "bytes": 11734,
-      "sha256": "a102817eeed89ec65b133345cd05d65e66c5c61c73b21c6c0745ed6bd86fc24c"
+      "bytes": 11790,
+      "sha256": "5c015e9d26dab15fcaa999327ed329342fc4233fae7de8cc5115b56f7b9a6423"
     },
     {
       "file": "game.js",
@@ -48,8 +48,8 @@
     },
     {
       "file": "campaign.js",
-      "bytes": 5969,
-      "sha256": "3ce093f6e329ef5bae2d7deae41f6965eb60a98d8d75488461a2e5355fdd5e20"
+      "bytes": 6257,
+      "sha256": "06da0f1ed03300bec4fcf90abea04a1380aad121b31c7bff29280afde73e2813"
     },
     {
       "file": "campaign-vfx.js",

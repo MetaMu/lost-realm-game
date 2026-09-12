@@ -35,7 +35,7 @@
   }
   const distance = (a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
   const stats = t=>({damage:TYPES[t.type].damage*(1+(t.level-1)*.55),range:TYPES[t.type].range+(t.level-1)*18,interval:TYPES[t.type].interval/((t.type==='lady'||t.type==='phil')?1:1+(t.level-1)*.12)});
-  const upgradeCost = t=>Math.round(TYPES[t.type].cost*(.75+t.level*.3));
+  const upgradeCost = t=>Math.round((TYPES[t.type].upgradeBaseCost||TYPES[t.type].cost)*(.75+t.level*.3)*(t.type==='lady'?.5:1));
   class Game {
     constructor(){this.reset();}
     reset(){Object.assign(this,{gold:340,lives:20,stage:1,wave:0,kills:0,status:'build',time:0,waveTime:0,towers:[],enemies:[],projectiles:[],effects:[],events:[],queue:[],nextId:1,waveLeaks:0,lastClear:null});}
