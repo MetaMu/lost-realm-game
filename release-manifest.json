@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0-beta.1",
+  "version": "1.1.0-beta.2",
   "files": [
     {
       "file": "index.html",
-      "bytes": 6247,
-      "sha256": "948178df30f9d185b526791285fea7627b2a73e52a3cb48384cac85708fc6879"
+      "bytes": 6399,
+      "sha256": "274fbd548d5012293f6ea8ff30227a7e0ed4dc8fae539e6b8d19a44538f3444a"
     },
     {
       "file": "style.css",
@@ -18,13 +18,13 @@
     },
     {
       "file": "core.js",
-      "bytes": 10070,
-      "sha256": "a46684d00021a0c282a61b10b3bca4d55338b12e8849e90697f7af9bd0509ee2"
+      "bytes": 10999,
+      "sha256": "cb674b70df2ef5c67b7162805f2d2a1b8ff68fa365f292c29db21b46581ae13f"
     },
     {
       "file": "game.js",
-      "bytes": 18447,
-      "sha256": "70abaea000828504543c589cbdd0ed590e0265b6bf6fdf8274689a3ad25b5f76"
+      "bytes": 19062,
+      "sha256": "8764d7f417d29ef7f4ba7138da7b640ff62efede060b5445248568f6350544f8"
     },
     {
       "file": "sprite.js",

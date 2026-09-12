@@ -18,6 +18,9 @@
     venom: { name: 'Venom Nemesis', hp: 85, speed: 78, bounty: 16, armor: .1, size: 1.08, leak: 1 },
     boss: { name: 'King Nibble', hp: 1350, speed: 32, bounty: 130, armor: .35, size: 1.7, leak: 5 }
   };
+  // Keep terrain, trail and clearings in the same vertically centered projection.
+  for(const p of PATH)p[1]+=64;
+  for(const p of PADS)p.y=p.y<160?p.y*1.4:p.y+64;
   const segments = PATH.slice(1).map((p,i)=>({a:PATH[i],b:p,length:Math.hypot(p[0]-PATH[i][0],p[1]-PATH[i][1])}));
   const pathLength = segments.reduce((s,p)=>s+p.length,0);
   function position(progress) {
@@ -40,12 +43,13 @@
     place(type,pad){
       if(!TYPES[type]||!Number.isInteger(pad)||!PADS[pad]||this.towers.some(t=>t.pad===pad)||this.gold<TYPES[type].cost||['lost','won'].includes(this.status))return null;
       const t={id:this.nextId++,type,pad,...PADS[pad],level:1,cooldown:.15,spent:TYPES[type].cost,kills:0,damageDealt:0,targetMode:'first',beamTarget:0,beamTime:0,recoil:0};
+      t.hp=t.maxHp=100;
       this.gold-=t.spent;this.towers.push(t);this.emit('placed',{tower:t});return t;
     }
-    upgrade(id){const t=this.towers.find(t=>t.id===id);if(!t||t.level>=3||this.gold<upgradeCost(t)||['lost','won'].includes(this.status))return false;const cost=upgradeCost(t);this.gold-=cost;t.spent+=cost;t.level++;this.emit('upgraded',{tower:t});return true;}
+    upgrade(id){const t=this.towers.find(t=>t.id===id);if(!t||t.level>=3||this.gold<upgradeCost(t)||['lost','won'].includes(this.status))return false;const cost=upgradeCost(t);this.gold-=cost;t.spent+=cost;t.level++;t.maxHp+=35;t.hp+=35;this.emit('upgraded',{tower:t});return true;}
     sell(id){const i=this.towers.findIndex(t=>t.id===id);if(i<0||['lost','won'].includes(this.status))return false;this.gold+=Math.floor(this.towers[i].spent*.7);this.towers.splice(i,1);return true;}
     startWave(){if(this.status!=='build'||this.wave>=MAX_WAVES)return false;this.wave++;this.waveTime=0;this.waveLeaks=0;this.queue=wavePlan(this.wave,this.stage);this.status='wave';this.emit('wave');return true;}
-    spawn(kind){const spec=ENEMIES[kind],hp=spec.hp*(1+(this.wave-1)*.2)*(this.stage===2?3.4:1);const e={...spec,mutated:this.stage===2,speed:spec.speed*(this.stage===2?1.2:1),armor:Math.min(.65,spec.armor+(this.stage===2?.12:0)),id:this.nextId++,kind,hp,maxHp:hp,progress:0,slowUntil:0,slow:0,poisonUntil:0,poisonDps:0,poisonOwner:null,...position(0)};this.enemies.push(e);return e;}
+    spawn(kind){const spec=ENEMIES[kind],hp=spec.hp*3*(1+(this.wave-1)*.2)*(this.stage===2?3.4:1);const e={...spec,mutated:this.stage===2,speed:spec.speed*(this.stage===2?1.2:1),armor:Math.min(.65,spec.armor+(this.stage===2?.12:0)),id:this.nextId++,kind,hp,maxHp:hp,progress:0,slowUntil:0,slow:0,poisonUntil:0,poisonDps:0,poisonOwner:null,...position(0)};this.enemies.push(e);return e;}
     hurt(e,amount,owner,pierce=false){
       if(e.hp<=0)return;const damage=amount*(pierce?1:1-e.armor);if(owner)owner.damageDealt+=Math.min(e.hp,damage);e.hp-=damage;
       if(e.hp<=0){this.gold+=e.bounty;this.kills++;if(owner)owner.kills++;this.emit('kill',{x:e.x,y:e.y,bounty:e.bounty});this.effects.push({kind:'burst',x:e.x,y:e.y-25,color:'#eac874',life:.45,age:0});}
@@ -83,6 +87,7 @@
         if(e.hp<=0)continue;if(e.poisonUntil>this.time)this.hurt(e,e.poisonDps*dt*(e.kind==='venom'?.25:1),e.poisonOwner,true);if(e.hp<=0)continue;
         e.enraged=e.kind==='brute'&&e.hp<e.maxHp*.5;
         e.progress+=e.speed*dt*(e.enraged?1.4:1)*(e.slowUntil>this.time?1-e.slow:1);Object.assign(e,position(e.progress));
+        if(e.kind==='venom'&&e.progress<pathLength){e.attackCooldown=(e.attackCooldown||0)-dt;const victim=this.towers.filter(t=>distance(e,t)<=155).sort((a,b)=>distance(e,a)-distance(e,b))[0];if(victim&&e.attackCooldown<=0){e.attackCooldown=1.3;victim.hp=Math.max(0,victim.hp-(e.mutated?27:18));this.effects.push({kind:'lightning',x:e.x,y:e.y-35,tx:victim.x,ty:victim.y-55,color:'#89ff43',life:.45,age:0});this.emit('towerHit',{tower:victim});if(victim.hp===0){this.towers=this.towers.filter(t=>t!==victim);this.projectiles=this.projectiles.filter(p=>p.owner!==victim);this.effects.push({kind:'cannon',x:victim.x,y:victim.y-30,radius:45,color:'#89ff43',life:.8,age:0});this.emit('towerDestroyed',{tower:victim});}}}
         if(e.progress>=pathLength){e.hp=0;this.lives=Math.max(0,this.lives-e.leak);this.waveLeaks+=e.leak;this.emit('leak',{amount:e.leak});}
       }
       if(this.lives<=0){this.status='lost';this.emit('lost');return;}
