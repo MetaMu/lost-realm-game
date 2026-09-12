@@ -3,7 +3,10 @@
 .ashen .guardian-panel,.ashen .wave-panel,.ashen .resources{background:#302e26;border-color:#65523c}
 .ashen .card-copy{background:#39362b}.ashen .tower-card{background:#383c30}.ashen .arena{border-color:#6e4b32}
 .ashen .guardian-copy>p,.ashen .wave-description{color:#c4b9a0}.ashen dialog{background:#302e26}
-.ashen .portrait-halo{opacity:.25}.ashen .wave-button{background:#65432c;color:#ffedca}
+.ashen .portrait-halo{opacity:.25}
+.wave-button,.ashen .wave-button{padding:17px 18px;font-size:15.4px;line-height:1.25;border:1px solid #a57520;border-radius:9px;background:linear-gradient(135deg,#ffe59a,#e8b849 65%,#c9952c);color:#352707;font-weight:750;box-shadow:0 3px 9px #73521c30,inset 0 1px 0 #fff4c8;min-height:55px}
+.wave-button:disabled{background:#d8c99f;color:#655b40;box-shadow:none;cursor:not-allowed}
+.wave-button:focus-visible{outline:3px solid #294d38;outline-offset:3px}
 .ashen #powerBadge{background:#493e2a;color:#ffedca}
 button:focus-visible,a:focus-visible{outline:3px solid #b78432;outline-offset:4px}
 @media(max-width:600px){.masthead{flex-wrap:wrap;gap:14px}.masthead nav{flex-wrap:wrap;gap:12px}.page{width:94%}.route-label{display:none}}
