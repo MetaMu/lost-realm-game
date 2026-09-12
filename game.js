@@ -40,7 +40,7 @@
   const freezeBtn=document.createElement('button');freezeBtn.id='freezeBtn';freezeBtn.className='primary';$('#arena').append(freezeBtn);freezeBtn.onclick=()=>{if(!paused&&game.freezeKnowME())toast('KnowME — FIVE-SECOND DEEP FREEZE');};
   const hellfireBtn=document.createElement('button');hellfireBtn.id='hellfireBtn';hellfireBtn.className='primary';$('#arena').append(hellfireBtn);hellfireBtn.onclick=()=>{if(!paused&&game.summonHellfire())toast('Old Sailor — HELLFIRE BARRAGE');};
   $('#renoBtn').onclick=()=>{if(!paused&&game.summonReno()){$('#arena').scrollIntoView({behavior:'instant',block:'center'});toast('Reno Mo — THORN RECKONING');}};
-  function drawEffects(){for(const b of game.hellfire){if(b.target.hp<=0||b.left>.6)continue;const x=b.target.x,y=b.target.y-25-b.left*700;ctx.save();ctx.strokeStyle='#ffdb79';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x-15,y-60);ctx.lineTo(x,y);ctx.stroke();ctx.fillStyle='#ff6d24';ctx.beginPath();ctx.arc(x,y,9,0,7);ctx.fill();ctx.restore();}for(const e of game.effects)vfx.effect(e);}
+  function drawEffects(){for(const b of game.hellfire)vfx.hellfireBomb(b,visualTime);for(const e of game.effects){if(e.hellfire)vfx.hellfireImpact(e);else vfx.effect(e);}}
   function paint(){ctx.clearRect(0,0,1200,800);drawMap();drawPads();
     if(selectedTower){const t=selectedTower;ctx.save();ctx.strokeStyle=K.TYPES[t.type].color;ctx.fillStyle=K.TYPES[t.type].color+'12';ctx.setLineDash([5,7]);ctx.beginPath();ctx.arc(t.x,t.y,K.stats(t).range,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore();}
     [...game.towers.map(t=>({y:t.y,draw:()=>drawTowers([t])})),...game.enemies.map(e=>({y:e.y,draw:()=>drawEnemies([e])}))].sort((a,b)=>a.y-b.y).forEach(s=>s.draw());
