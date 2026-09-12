@@ -38,7 +38,7 @@
   const upgradeCost = t=>Math.round(TYPES[t.type].cost*(.75+t.level*.3));
   class Game {
     constructor(){this.reset();}
-    reset(){Object.assign(this,{gold:340,lives:20,stage:1,wave:0,kills:0,status:'build',time:0,waveTime:0,towers:[],enemies:[],projectiles:[],effects:[],events:[],queue:[],nextId:1,waveLeaks:0});}
+    reset(){Object.assign(this,{gold:340,lives:20,stage:1,wave:0,kills:0,status:'build',time:0,waveTime:0,towers:[],enemies:[],projectiles:[],effects:[],events:[],queue:[],nextId:1,waveLeaks:0,lastClear:null});}
     emit(type,data={}){this.events.push({type,...data});}
     place(type,pad){
       if(!TYPES[type]||(TYPES[type].unlock||1)>this.stage||!Number.isInteger(pad)||!PADS[pad]||this.towers.some(t=>t.pad===pad)||this.gold<TYPES[type].cost||['lost','won'].includes(this.status))return null;
@@ -97,9 +97,9 @@
       this.projectiles=this.projectiles.filter(p=>p.age<p.duration);
       this.enemies=this.enemies.filter(e=>e.hp>0);
       if(!this.queue.length&&!this.enemies.length){
-        const bonus=35+this.wave*5;this.gold+=bonus;this.projectiles=[];this.effects=[];
+        const milestone=this.stage===1?(this.wave===5?500:this.wave===10?1000:0):0;const bonus=35+this.wave*5+milestone;this.lastClear={wave:this.wave,stage:this.stage,bonus,milestone};this.gold+=bonus;this.projectiles=[];this.effects=[];
         if(this.wave===stageWaves(this.stage)&&this.stage<3){this.stage++;this.wave=0;this.lives=Math.min(20,this.lives+8);this.gold+=250;this.status='build';this.emit('stage');}
-        else{this.status=this.wave===stageWaves(this.stage)?'won':'build';this.emit(this.status==='won'?'won':'cleared',{bonus,perfect:this.waveLeaks===0});}
+        else{this.status=this.wave===stageWaves(this.stage)?'won':'build';this.emit(this.status==='won'?'won':'cleared',{bonus,milestone,perfect:this.waveLeaks===0});}
       }
     }
   }
