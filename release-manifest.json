@@ -8,8 +8,8 @@
     },
     {
       "file": "index.html",
-      "bytes": 7152,
-      "sha256": "d8c92217005927d6b278310f7b032c5bbb4c8ff1392e8fca64a43edc40a62972"
+      "bytes": 7178,
+      "sha256": "1f3956a1b69efef774e779fa7b36706c00b8cad7412b520504a6b1d2eb2e942f"
     },
     {
       "file": "style.css",
@@ -48,13 +48,13 @@
     },
     {
       "file": "campaign.js",
-      "bytes": 5960,
-      "sha256": "dc339c1b86f444f50f3fc47ef42f0dd0ed5b4d1a0c6c986696f9633b5c37628d"
+      "bytes": 5905,
+      "sha256": "881a59f97453c42cf009653c3bdcdd97e2fd30065f08718bd9bd1b9612000b85"
     },
     {
       "file": "campaign-vfx.js",
-      "bytes": 3473,
-      "sha256": "07557a047df7ceee4234ace03dd545aff2ca7d68b8231c1366940a4780121ad1"
+      "bytes": 3476,
+      "sha256": "555c8a31a309b6b88ff64a2de98bc0674cdd796686b67960e3bfc7f99fe7b985"
     },
     {
       "file": "bestiary.html",

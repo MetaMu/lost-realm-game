@@ -18,9 +18,9 @@
   }
   freezeKnowME(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.freezeUsed||this.ultimate||!this.towers.some(t=>t.type==='knowme')||!targets.length)return false;this.freezeUsed=true;this.freezeUntil=this.time+5;for(const e of targets)e.frozenUntil=this.freezeUntil;this.emit('cast',{power:'knowme'});return true;}
   summonReno(){const alive=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.gold<1500||this.ultimate||this.ultimateCooldown>0||!alive.length)return false;
-   this.gold-=1500;this.ultimateCooldown=45;this.ultimate={age:0,life:4.5,targets:alive.sort((a,b)=>b.progress-a.progress).slice(0,Math.ceil(alive.length/2)),hit:new Set()};this.emit('ultimateStart');return true;}
+   this.gold-=1500;this.ultimateCooldown=45;this.ultimate={age:0,life:4.5,targets:alive,hit:new Set()};this.emit('ultimateStart');return true;}
   update(dt){dt=Math.max(0,Math.min(.05,dt));
-   if(this.ultimate){const u=this.ultimate;u.age+=dt;if(u.age>=2){const reach=Math.min(1,(u.age-2)/2)*K.pathLength;for(const e of u.targets)if(!u.hit.has(e.id)&&e.progress<=reach){u.hit.add(e.id);this.hurt(e,e.hp,null,true);this.effects.push({kind:'thorns',x:e.x,y:e.y-20,color:'#9aff75',life:.8,age:0});}}if(u.age>=u.life){this.ultimate=null;this.enemies=this.enemies.filter(e=>e.hp>0);}return;}
+   if(this.ultimate){const u=this.ultimate;u.age+=dt;if(u.age>=2){const reach=Math.min(1,(u.age-2)/2)*K.pathLength;for(const e of u.targets)if(!u.hit.has(e.id)&&(e.progress<=reach||u.age>=4)){u.hit.add(e.id);this.hurt(e,e.hp*.5,null,true);this.effects.push({kind:'thorns',x:e.x,y:e.y-20,color:'#9aff75',life:.8,age:0});}}if(u.age>=u.life){this.ultimate=null;this.enemies=this.enemies.filter(e=>e.hp>0);}return;}
    if(this.status!=='wave'){super.update(dt);return;}
    this.ultimateCooldown=Math.max(0,this.ultimateCooldown-dt);
    for(const t of this.towers.filter(t=>t.type==='lady')){let healing=false;for(const other of this.towers)if(other!==t&&other.hp<other.maxHp&&dist(t,other)<=K.stats(t).range){other.hp=Math.min(other.maxHp,other.hp+4*t.level*dt);healing=true;if((t.healPulse||0)<=this.time)this.effects.push({kind:'heal',x:t.x,y:t.y-65,tx:other.x,ty:other.y-40,color:'#afffe0',life:1,age:0});}if(healing&&(t.healPulse||0)<=this.time)t.healPulse=this.time+1;}
