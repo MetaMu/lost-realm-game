@@ -18,8 +18,8 @@
     },
     {
       "file": "campaign.css",
-      "bytes": 6421,
-      "sha256": "a8684b61ebe6ef2506cc5185807f1c29eafbef81d40f31e397e6667f9f0f6fa5"
+      "bytes": 7821,
+      "sha256": "19c54d1a84b0bd2b03ece084ffc7cc1bec131de9528b9d645d4761e261a47eed"
     },
     {
       "file": "core.js",
@@ -28,8 +28,8 @@
     },
     {
       "file": "game.js",
-      "bytes": 22926,
-      "sha256": "fcff6a463fbfb2fc4d72e611082f99585496120e0fb11ca42841d1219c65e4c0"
+      "bytes": 23186,
+      "sha256": "56248772c13093f43ea6e237144c35ee6bd5b903dffaeceb2d036a83e451389b"
     },
     {
       "file": "sprite.js",
@@ -53,8 +53,8 @@
     },
     {
       "file": "campaign-vfx.js",
-      "bytes": 3476,
-      "sha256": "555c8a31a309b6b88ff64a2de98bc0674cdd796686b67960e3bfc7f99fe7b985"
+      "bytes": 5557,
+      "sha256": "596314e9c78b1b4395877433b91c37f1b5b9f026bc8b84db79e3fccf20f52427"
     },
     {
       "file": "bestiary.html",

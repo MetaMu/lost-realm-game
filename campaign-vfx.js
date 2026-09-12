@@ -1,4 +1,24 @@
 /* Local sprite choreography; no flashing full-screen white frames or new songs. */
+function drawRenoVines(c,K,end,vfx){
+ const point=(p,offset=0)=>{const a=K.position(Math.max(0,p)),b=K.position(Math.min(K.pathLength,p+2)),angle=Math.atan2(b.y-a.y,b.x-a.x);return{x:a.x-Math.sin(angle)*offset,y:a.y+Math.cos(angle)*offset,angle};};
+ c.save();c.lineCap='round';c.lineJoin='round';
+ // Interwoven woody stems, with a grounded shadow and uneven silhouettes.
+ for(let strand=0;strand<3;strand++){
+  const trace=(width,color,shift=0)=>{c.lineWidth=width;c.strokeStyle=color;c.beginPath();let first=true;for(let p=0;p<=end;p+=6){const a=point(p,Math.sin(p*.047+strand*2.1)*(strand?8:3));if(first){c.moveTo(a.x,a.y+shift);first=false;}else c.lineTo(a.x,a.y+shift);}c.stroke();};
+  trace(strand?12:23,'#15201566',7);trace(strand?10:21,'#29271b');trace(strand?7:16,strand===1?'#655b32':'#4c5030');trace(strand?2:5,'#979268',-2);
+ }
+ for(let p=12;p<end;p+=15){const a=point(p),growth=Math.min(1,(end-p)/65);if(growth<=0)continue;c.save();c.translate(a.x,a.y);c.rotate(a.angle);
+  // Fixed bark grooves and moss flecks, never randomized between frames.
+  c.strokeStyle='#28271bb0';c.lineWidth=1.3;for(let j=0;j<3;j++){const y=(j-1)*5+Math.sin(p*.13+j)*2;c.beginPath();c.moveTo(-6,y);c.quadraticCurveTo(0,y+3,7,y-1);c.stroke();}c.fillStyle='#82904488';c.fillRect(-3,Math.sin(p)*7,4,2);
+  if(Math.floor(p/15)%3===0){const side=Math.sin(p*2)>0?1:-1,len=(22+12*Math.sin(p))*growth;c.strokeStyle='#50432b';c.lineWidth=4*growth;c.beginPath();c.moveTo(0,side*5);c.bezierCurveTo(6,side*14,17,side*len,29,side*(len+5));c.stroke();c.lineWidth=1.5;c.strokeStyle='#a19766';c.stroke();
+   c.strokeStyle='#453b27';c.lineWidth=1;c.beginPath();c.moveTo(19,side*len);c.quadraticCurveTo(25,side*(len+15),34,side*(len+12));c.stroke();
+   c.fillStyle='#354e2b';c.beginPath();c.moveTo(12,side*15);c.quadraticCurveTo(7,side*39,32,side*34);c.quadraticCurveTo(31,side*17,12,side*15);c.fill();c.strokeStyle='#849258';c.beginPath();c.moveTo(12,side*15);c.lineTo(30,side*33);c.moveTo(19,side*22);c.lineTo(14,side*28);c.moveTo(23,side*26);c.lineTo(28,side*24);c.stroke();
+  }
+  if(Math.floor(p/15)%2===0){const side=Math.sin(p)>0?1:-1;c.fillStyle='#56432c';c.beginPath();c.moveTo(-5,side*7);c.quadraticCurveTo(4,side*12,10,side*25*growth);c.quadraticCurveTo(9,side*10,4,side*6);c.closePath();c.fill();c.strokeStyle='#b9a877';c.lineWidth=1;c.beginPath();c.moveTo(-3,side*8);c.lineTo(10,side*25*growth);c.stroke();}
+  c.restore();
+ }
+ const head=point(end);for(let i=0;i<10;i++){const a=i*2.4,r=12+i*2;c.fillStyle=i%2?'#74604499':'#423926bb';c.beginPath();c.ellipse(head.x+Math.cos(a)*r,head.y+Math.sin(a)*r*.45,3+i%3,2, a,0,7);c.fill();}vfx.glow(head.x,head.y,32,'#9cbb66',.35);c.restore();
+}
 window.drawKnollCampaign=function(c,g,art,vfx,time){
  const K=KnollDefense,draw=(im,x,y,size,alpha=1)=>{if(!im)return;c.save();c.globalAlpha*=alpha;c.drawImage(im,x-size/2,y-size,size,size);c.restore();};
  for(const a of g.allies){draw(art.demon[a.inCombat?(a.cooldown>.4?2:3):Math.floor(a.progress/8)%2],a.x,a.y,120);c.fillStyle='#111d18';c.fillRect(a.x-25,a.y+5,50,5);c.fillStyle='#97ffb2';c.fillRect(a.x-25,a.y+5,50*Math.max(0,a.hp/a.maxHp),5);c.fillStyle='#c5ffbf';c.font='bold 10px Segoe UI';c.textAlign='center';c.fillText('ALLY',a.x,a.y+21);}
@@ -9,7 +29,7 @@ window.drawKnollCampaign=function(c,g,art,vfx,time){
  for(const a of g.conversions){const t=a.target,o=a.owner,q=1-a.left/2;c.save();c.strokeStyle='#b4ffdf';c.lineWidth=2;c.setLineDash([8,7]);c.lineDashOffset=-time*30;c.beginPath();c.moveTo(o.x,o.y-90);c.quadraticCurveTo((o.x+t.x)/2,t.y-160,t.x,t.y-45);c.stroke();c.setLineDash([]);c.strokeStyle='#bb8dff';c.beginPath();c.ellipse(t.x,t.y,30,12,0,-Math.PI/2,-Math.PI/2+q*Math.PI*2);c.stroke();vfx.glow(t.x,t.y-40,50,'#b69aff',q*.5);c.restore();}
  if(g.ultimate){const u=g.ultimate,t=u.age;c.save();c.fillStyle='#03180ee0';c.fillRect(0,0,1200,70);c.fillRect(0,720,1200,80);
   if(t<2.1){c.fillStyle='#06130b99';c.fillRect(0,70,1200,650);const frame=t<.4?0:t<1.45?1:2;vfx.glow(600,420,240,'#a2dc68',.65);draw(art.reno[frame],600,680,530);c.fillStyle='#f3eccb';c.font='bold 34px Georgia';c.textAlign='center';c.fillText('RENO MO',600,55);c.font='18px Georgia';c.fillText(t<1.45?'The roots remember.':'THORN RECKONING',600,762);}
-  else{const end=Math.min(1,(t-2)/2)*K.pathLength;c.lineCap='round';for(const [width,color] of [[24,'#172b0a'],[16,'#527b32'],[5,'#c5df83']]){c.strokeStyle=color;c.lineWidth=width;c.beginPath();for(let p=0;p<=end;p+=7){const at=K.position(p);if(p===0)c.moveTo(at.x,at.y);else c.lineTo(at.x,at.y);}c.stroke();}for(let p=15;p<end;p+=30){const at=K.position(p),next=K.position(Math.min(K.pathLength,p+3)),a=Math.atan2(next.y-at.y,next.x-at.x);c.save();c.translate(at.x,at.y);c.rotate(a);c.fillStyle='#abca6b';c.beginPath();c.moveTo(-6,0);c.lineTo(7,-25*(p%60<30?1:-1));c.lineTo(5,0);c.fill();c.restore();}const head=K.position(end);vfx.glow(head.x,head.y,60,'#a4e960');draw(art.reno[3],1080,735,170);c.fillStyle='#eef7c5';c.font='bold 24px Georgia';c.textAlign='center';c.fillText('THORN RECKONING',600,46);c.font='16px Segoe UI';c.fillText(u.hit.size+' / '+u.targets.length+' enemies hit · 50% health removed',600,765);}
+  else{const end=Math.min(1,(t-2)/2)*K.pathLength;drawRenoVines(c,K,end,vfx);draw(art.reno[3],1080,735,170);c.fillStyle='#eef7c5';c.font='bold 24px Georgia';c.textAlign='center';c.fillText('THORN RECKONING',600,46);c.font='16px Segoe UI';c.fillText(u.hit.size+' / '+u.targets.length+' enemies hit · 50% health removed',600,765);}
   c.restore();
  }
 };
