@@ -2,7 +2,7 @@
 (function(root){
  'use strict';const K=root.KnollDefense||(typeof require==='function'?require('./core.js'):null),Base=K.Game;
  Object.assign(K.TYPES,{
-  lady:{name:'Lady Never Scared',title:'The Soul Gardener',power:'Healing · soul conversion',unlock:2,cost:320,color:'#afffe0',range:185,damage:0,interval:15,description:'Heals herself and nearby guardians for 4 HP/sec per level. Every 15 combat seconds, channels for 2 seconds to turn a non-boss mutant into an allied demon with 50% more health and attack damage.'},
+  lady:{name:'Lady Never Scared',title:'The Soul Gardener',power:'Healing · soul conversion',unlock:2,cost:320,color:'#afffe0',range:185,damage:0,interval:10.5,description:'Heals herself and nearby guardians for 4 HP/sec per level. Every 10.5 combat seconds, channels for 2 seconds to turn a non-boss mutant into an allied demon with 95% more health and attack damage.'},
   phil:{name:'Phil Heal',title:'The Neon Shinobi',power:'Shadow uppercut',unlock:3,cost:420,color:'#60eeff',range:260,damage:280,interval:36,description:'Every 36 combat seconds, one neon shadow clone uppercuts up to three foes. Armor-piercing hits stun briefly. Clones never overlap.'}
  });
  const baseStats=K.stats;K.stats=t=>{const s=baseStats(t);if(t.type==='lady'||t.type==='phil')s.interval=K.TYPES[t.type].interval;return s;};
@@ -24,7 +24,7 @@
    if(this.status!=='wave'){super.update(dt);return;}
    this.ultimateCooldown=Math.max(0,this.ultimateCooldown-dt);
    for(const t of this.towers.filter(t=>t.type==='lady')){let healing=false;for(const other of this.towers)if(other.hp<other.maxHp&&dist(t,other)<=K.stats(t).range){other.hp=Math.min(other.maxHp,other.hp+4*t.level*dt);healing=true;if((t.healPulse||0)<=this.time)this.effects.push({kind:'heal',x:t.x,y:t.y-65,tx:other.x,ty:other.y-40,color:'#afffe0',life:1,age:0});}if(healing&&(t.healPulse||0)<=this.time)t.healPulse=this.time+1;}
-   for(const c of this.conversions){c.left-=dt;if(!this.towers.includes(c.owner)||c.target.hp<=0||!this.enemies.includes(c.target)){c.left=-1;continue;}if(c.left<=0){const e=c.target;this.enemies=this.enemies.filter(a=>a!==e);this.allies.push({...e,id:this.nextId++,kind:'demon',owner:c.owner,hp:Math.min(900,e.hp)*1.5,maxHp:Math.min(900,e.hp)*1.5,damage:85*1.5*c.owner.level,cooldown:0,poisonUntil:0,slowUntil:0});this.emit('converted',{x:e.x,y:e.y});}}
+   for(const c of this.conversions){c.left-=dt;if(!this.towers.includes(c.owner)||c.target.hp<=0||!this.enemies.includes(c.target)){c.left=-1;continue;}if(c.left<=0){const e=c.target;this.enemies=this.enemies.filter(a=>a!==e);this.allies.push({...e,id:this.nextId++,kind:'demon',owner:c.owner,hp:Math.min(900,e.hp)*1.95,maxHp:Math.min(900,e.hp)*1.95,damage:85*1.95*c.owner.level,cooldown:0,poisonUntil:0,slowUntil:0});this.emit('converted',{x:e.x,y:e.y});}}
    this.conversions=this.conversions.filter(c=>c.left>0);
    for(const hit of this.shadowHits){hit.left-=dt;if(hit.left<=0&&hit.target.hp>0&&this.towers.includes(hit.owner)){const e=hit.target;this.hurt(e,K.stats(hit.owner).damage,hit.owner,true);e.slow=1;e.slowUntil=this.time+.8;this.effects.push({kind:'uppercut',x:e.x,y:e.y,color:'#60eeff',life:.65,age:0});this.emit('cast',{power:'phil'});}}
    this.shadowHits=this.shadowHits.filter(h=>h.left>0);
