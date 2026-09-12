@@ -42,7 +42,7 @@ window.KnollVFX=class {
     }else if(e.kind==='lightning'){
       // Arc discharge: wide colored corona, narrow white core, independent branches.
       const points=[[e.x,e.y]],dx=e.tx-e.x,dy=e.ty-e.y,len=Math.hypot(dx,dy)||1,n=Math.max(4,Math.ceil(len/18)),flicker=Math.floor(t*35);
-      for(let i=1;i<n;i++){const off=(rand(i+flicker*17)-.5)*25;points.push([e.x+dx*i/n-dy/len*off,e.y+dy*i/n+dx/len*off]);}points.push([e.tx,e.ty]);c.globalCompositeOperation='lighter';this.line(points,13,(e.color||'#ad9aff')+'25');this.line(points,5,e.color||'#a99aff');this.line(points,1.6,'#eef6ff');
+      for(let i=1;i<n;i++){const off=(rand(i+flicker*17)-.5)*25;points.push([e.x+dx*i/n-dy/len*off,e.y+dy*i/n+dx/len*off]);}points.push([e.tx,e.ty]);c.globalCompositeOperation='lighter';this.line(points,e.linked?19:13,(e.color||'#ad9aff')+'25');this.line(points,e.linked?7:5,e.color||'#a99aff');this.line(points,1.6,'#eef6ff');
       for(let i=2;i<points.length-1;i+=3){const p=points[i],sign=i%2?1:-1;this.line([p,[p[0]+dx/len*12-dy/len*20*sign,p[1]+dy/len*12+dx/len*20*sign],[p[0]+dx/len*25-dy/len*32*sign,p[1]+dy/len*25+dx/len*32*sign]],1,'#bfe6ff');}this.glow(e.x,e.y,25,'#ac8eff',.7);this.glow(e.tx,e.ty,32,'#b6b0ff');for(let i=0;i<7;i++){const a=rand(i)*6.28,r=t*(70+rand(i+8)*100);this.line([[e.tx+Math.cos(a)*r,e.ty+Math.sin(a)*r],[e.tx+Math.cos(a)*(r+7),e.ty+Math.sin(a)*(r+7)]],1,'#e4edff');}
     }else if(e.kind==='beam'){
       // Solar lance: luminous envelope, hot core, rotating impact star and sparks.

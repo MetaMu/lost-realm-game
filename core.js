@@ -4,7 +4,7 @@
   const WIDTH = 1200, HEIGHT = 800, MAX_WAVES = 20, STAGE_WAVES = [0,15,18,20], stageWaves = stage=>STAGE_WAVES[stage]||15;
   const TYPES = {
     knowme: { name: 'KnowME', title: 'The Mindbender', power: 'Frost spores', cost: 85, color: '#80dcd5', range: 185, damage: 8, interval: .95, description: 'An icy cloud of frost spores freezes the flock’s advance. Give your heavy hitters time to do their thing.' },
-    host: { name: 'Host', title: 'The Stormcaller', power: 'Chain lightning', cost: 130, color: '#c4a2ff', range: 190, damage: 19, interval: 1.15, description: 'Violet lightning jumps between three enemies. A little chaos goes a long way against a crowd.' },
+    host: { name: 'Host', title: 'The Stormcaller', power: 'Chain lightning', cost: 130, color: '#c4a2ff', range: 190, damage: 19, interval: 1.15, description: 'Violet lightning chains through three enemies (four at max level). Place another Host within 190 map units to chain through five.' },
     sailor: { name: 'Old Sailor', title: 'The Cannoneer', power: 'Cannon barrage', cost: 155, color: '#f2ba70', range: 240, damage: 44, interval: 1.9, description: 'A weathered coat. An unreasonable cannon. Explosive rounds punish tightly packed enemies.' },
     maahaa: { name: 'Maahaa', title: 'The Sunkeeper', power: 'Solar beam', cost: 190, color: '#ffe39a', range: 220, damage: 8, interval: .22, description: 'An armor-piercing sunbeam grows stronger on the same target. Built to bring down the big birds.' },
     fordenad: { name: 'Fordenad', title: 'The Thornwarden', power: 'Venom thorns', cost: 105, color: '#acd17f', range: 205, damage: 8, interval: .72, description: 'Enchanted thorns poison their mark for three seconds. Venom ignores armor and lingers after the shot.' }
@@ -58,9 +58,9 @@
     fire(t,e){
       const s=stats(t),color=TYPES[t.type].color;t.recoil=1;this.emit('cast',{power:t.type});
       if(t.type==='host'){
-        const used=new Set();let current=e,prev={x:t.x,y:t.y-65};
-        for(let i=0;i<3+(t.level===3?1:0)&&current;i++){
-          used.add(current.id);this.effects.push({kind:'lightning',x:prev.x,y:prev.y,tx:current.x,ty:current.y-25,color,life:.3,age:0,seed:i*19+t.id});this.hurt(current,s.damage*Math.pow(.82,i),t);prev={x:current.x,y:current.y-25};
+        const linked=this.towers.some(a=>a!==t&&a.type==='host'&&a.hp>0&&distance(a,t)<=190);const used=new Set();let current=e,prev={x:t.x,y:t.y-65};
+        for(let i=0;i<(linked?5:3+(t.level===3?1:0))&&current;i++){
+          used.add(current.id);this.effects.push({kind:'lightning',x:prev.x,y:prev.y,tx:current.x,ty:current.y-25,color:linked?'#8cecff':color,linked,life:linked?.42:.3,age:0,seed:i*19+t.id});this.hurt(current,s.damage*Math.pow(.82,i),t);prev={x:current.x,y:current.y-25};
           current=this.enemies.filter(a=>a.hp>0&&!used.has(a.id)&&distance(a,current)<135).sort((a,b)=>distance(a,prev)-distance(b,prev))[0];
         }
       }else if(t.type==='maahaa'){
