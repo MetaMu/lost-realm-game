@@ -1,10 +1,10 @@
 {
-  "version": "1.1.0-beta.3",
+  "version": "1.2.0-beta.1",
   "files": [
     {
       "file": "index.html",
-      "bytes": 6429,
-      "sha256": "18134e1530612f8a1b44f389742ed02fb1ae2b2b9e0e7f273a44df8b7710b65f"
+      "bytes": 6739,
+      "sha256": "a3a07876e668bfe660706b0a09cb7a3649d45dd021b5ea2ddcf8c81bc2e01848"
     },
     {
       "file": "style.css",
@@ -13,33 +13,43 @@
     },
     {
       "file": "campaign.css",
-      "bytes": 792,
-      "sha256": "2798a6120a7c54b651480fde86b26f7ec22da81bc7701e11ad69be02a8f07a43"
+      "bytes": 1373,
+      "sha256": "81a5ecff914b1cbb5f49e275f8b34153909d5d75fe65dcb02ac7f0fccc5c94bb"
     },
     {
       "file": "core.js",
-      "bytes": 11073,
-      "sha256": "a0e1a907c1087930956b9016333fc92aa759975c76ba3986b0609cb28c5f17be"
+      "bytes": 11321,
+      "sha256": "5660a639a4b9e706ca3e5797d4e5a7ad486eaa0ad4768d641cfa856646737b6f"
     },
     {
       "file": "game.js",
-      "bytes": 16567,
-      "sha256": "af1d34237d1f867ca8f6ace85088fd760b9b5bf4adafec23956a0af590763cc8"
+      "bytes": 18877,
+      "sha256": "01a679f35cb3f2d53cdc3b4c34424fbe9f70834befaedf607c955e88262fdfab"
     },
     {
       "file": "sprite.js",
-      "bytes": 1125,
-      "sha256": "33a94b58400189941ed5823bb1f38ceec0420fd395a2a32488c62e84a8e2fe41"
+      "bytes": 1546,
+      "sha256": "9069f31f273f8631babaec8ba6ee2e3e0ad803986f8b0cd76b8b2e038a29904c"
     },
     {
       "file": "audio.js",
-      "bytes": 3445,
-      "sha256": "edbef848684537c2e2ec60822f241bf3892967a9d6609e1c4e27653c5e162e07"
+      "bytes": 3707,
+      "sha256": "6bb186569446e873826c5612d0cb75ca36cf2101a98af12013831028a04dfca6"
     },
     {
       "file": "vfx.js",
       "bytes": 6081,
       "sha256": "1acf40a3d0991af292216a54c3acd9ddba71cf95dedc05efd224d3035f7b53f5"
+    },
+    {
+      "file": "campaign.js",
+      "bytes": 5393,
+      "sha256": "3dfebf9e4160bd9618a407e719a46b52429f8b5edd6c65f51391e232829164b1"
+    },
+    {
+      "file": "campaign-vfx.js",
+      "bytes": 3473,
+      "sha256": "07557a047df7ceee4234ace03dd545aff2ca7d68b8231c1366940a4780121ad1"
     },
     {
       "file": "bestiary.html",
@@ -53,8 +63,8 @@
     },
     {
       "file": "assets/CREDITS.md",
-      "bytes": 1539,
-      "sha256": "525a2051e6a70b07fd782ea4bf9d463d33cde21e475c11780d6aaf55482ba292"
+      "bytes": 1982,
+      "sha256": "9ee280ed90ab9754952ba08b470a68ceb9139ff439ad593f3b7c7d0b4b155a9e"
     },
     {
       "file": "assets/audio/CREDITS.md",
@@ -110,6 +120,46 @@
       "file": "assets/forest-burnt.webp",
       "bytes": 2726744,
       "sha256": "a0d0dd9882daf77b38b628f0252577a694bfacfb014bfc8386dae7cffe1b42dd"
+    },
+    {
+      "file": "assets/eclipse-citadel.webp",
+      "bytes": 2837724,
+      "sha256": "88946327af1f6395898d7a5d26d748e8c1a5ee8b7008e3f4ab1e15cdf82b4004"
+    },
+    {
+      "file": "assets/lady.webp",
+      "bytes": 163902,
+      "sha256": "d519aa17f6d76141c8b5763d3791b5b2b50b4b192fac24bdf2d151ef2cbf33c5"
+    },
+    {
+      "file": "assets/phil.webp",
+      "bytes": 175528,
+      "sha256": "bb363c12b784b96611031a9b180230b708b7952c161d27d2305bdc98a55bc044"
+    },
+    {
+      "file": "assets/reno.webp",
+      "bytes": 172234,
+      "sha256": "6e2e00d6493889684a2c43413b5c921ebccb08464269d560bcf1c40b8f29c438"
+    },
+    {
+      "file": "assets/lady-actions.webp",
+      "bytes": 887472,
+      "sha256": "354ce25945ee95c55e914599d99757ce512f10a007d736db57d04b9415e14c0a"
+    },
+    {
+      "file": "assets/phil-actions.webp",
+      "bytes": 696536,
+      "sha256": "b887719f77bbba480d61d1c4d21137c4be2c3531d9c7242d27b57f5335b4d96a"
+    },
+    {
+      "file": "assets/reno-actions.webp",
+      "bytes": 965734,
+      "sha256": "8417bf04c97e53403bdd098c4662a260cfa94d6ffe0441cf26e98dfea60a7414"
+    },
+    {
+      "file": "assets/demon-actions.webp",
+      "bytes": 873232,
+      "sha256": "b1f2fc1a0ba1a57554c482796b3026af10e00f87e40ca59896417a73aa6f34e9"
     },
     {
       "file": "assets/walk-base.webp",

@@ -7,3 +7,6 @@
 .ashen #powerBadge{background:#493e2a;color:#ffedca}
 button:focus-visible,a:focus-visible{outline:3px solid #b78432;outline-offset:4px}
 @media(max-width:600px){.masthead{flex-wrap:wrap;gap:14px}.masthead nav{flex-wrap:wrap;gap:12px}.page{width:94%}.route-label{display:none}}
+.roster{grid-template-columns:repeat(4,minmax(0,1fr))}.tower-card:disabled{opacity:.4;filter:grayscale(.8)}#renoBtn{margin-top:14px;background:linear-gradient(100deg,#384e26,#644b26);border-color:#b8ac5c}#renoBtn:disabled{opacity:.55}
+@media(max-width:480px){.roster{grid-template-columns:repeat(3,minmax(0,1fr))}}
+#renoBtn{position:absolute;left:20px;bottom:54px;width:235px;max-width:65%;margin:0;z-index:3;padding:10px;font-size:10px}.ultimate-active .map-header,.ultimate-active .map-footer,.ultimate-active #renoBtn{visibility:hidden}.ultimate-active .pads{visibility:hidden}

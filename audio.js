@@ -13,7 +13,10 @@ window.KnollAudio=class {
  sample(key,rate,duration,volume){const buffer=this.buffers[key];if(!buffer)return;const s=this.ctx.createBufferSource();s.buffer=buffer;s.playbackRate.value=rate;this.voice(s,duration,volume);}
  play(type,phase='cast'){
   if(!this.enabled||!this.ctx)return;const key=type+phase,now=this.ctx.currentTime;if(now-(this.last[key]??-10)<(type==='maahaa'?.18:.1)||this.active.size>=25)return;this.last[key]=now;
-  if(type==='knowme'){
+  if(type==='lady'){this.sample('magic',.85,.7,.2);this.tone(440,880,.6,.05);}
+  else if(type==='phil'){this.hiss(1600,.3,.2);this.tone(170,45,.22,.2);}
+  else if(type==='reno'){this.tone(80,30,1.2,.3);this.sample('magic',.5,1.4,.18);this.hiss(400,1,.16);}
+  else if(type==='knowme'){
    if(phase==='impact'){this.sample('knowme',1.1,.75,.42);this.hiss(6200,.26,.25);[1800,2700,3900].forEach((f,i)=>this.tone(f,f*.62,.25+i*.06,.07,'sine',i*.025));}
    else{this.hiss(3100,.2,.19);this.tone(750,2100,.19,.09);}
   }else if(type==='host'){this.sample('host',1.05,.48,.22);this.tone(130,53,.22,.13,'sawtooth');this.hiss(4200,.13,.23);this.hiss(2100,.12,.15,.075);}
