@@ -8,7 +8,7 @@
  const baseStats=K.stats;K.stats=t=>{const s=baseStats(t);if(t.type==='lady'||t.type==='phil')s.interval=K.TYPES[t.type].interval;return s;};
  const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
  class CampaignGame extends Base {
-  reset(){super.reset();this.allies=[];this.conversions=[];this.shadowHits=[];this.ultimate=null;this.ultimateCooldown=0;this.freezeUsed=false;this.freezeCharges=2;this.freezeUntil=0;this.hellfireUsed=false;this.hellfire=[];this.reverseUsed=false;this.reverseUntil=0;}
+  reset(){super.reset();this.allies=[];this.conversions=[];this.shadowHits=[];this.ultimate=null;this.ultimateCooldown=0;this.freezeUsed=false;this.freezeCharges=2;this.freezeUntil=0;this.hellfireUsed=false;this.hellfire=[];this.reverseUsed=false;this.reverseUntil=0;this.volleyUsed=false;this.volleyUntil=0;this.volley=[];}
   place(type,pad){const t=super.place(type,pad);if(t&&(type==='lady'||type==='phil'))t.cooldown=K.TYPES[type].interval;return t;}
   target(t){if(t.type==='lady')return this.enemies.find(e=>e.hp>0&&e.mutated&&e.kind!=='boss'&&!this.conversions.some(c=>c.target===e)&&dist(t,e)<=K.stats(t).range);if(t.type==='phil'&&this.shadowHits.length)return null;return super.target(t);}
   fire(t,e){
@@ -17,6 +17,7 @@
    super.fire(t,e);
   }
   freezeKnowME(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.freezeCharges<=0||this.freezeUntil>this.time||this.ultimate||!this.towers.some(t=>t.type==='knowme')||!targets.length)return false;this.freezeCharges--;this.freezeUsed=this.freezeCharges===0;this.freezeUntil=this.time+5;for(const e of targets)e.frozenUntil=this.freezeUntil;this.emit('cast',{power:'knowme'});return true;}
+  poisonVolley(){const owner=this.towers.find(t=>t.type==='fordenad'),targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.ultimate||this.volleyUsed||!owner||!targets.length)return false;this.volleyUsed=true;this.volleyUntil=this.time+5.6;this.volley=targets.map(target=>({target,owner,left:.6,x:owner.x,y:owner.y-65}));return true;}
   reverseHost(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.ultimate||this.reverseUsed||!this.towers.some(t=>t.type==='host')||!targets.length)return false;this.reverseUsed=true;this.reverseUntil=this.time+10;for(const e of targets)e.reverseUntil=this.reverseUntil;this.emit('cast',{power:'host'});return true;}
   summonHellfire(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.ultimate||this.hellfireUsed||!this.towers.some(t=>t.type==='sailor')||!targets.length)return false;this.hellfireUsed=true;this.hellfire=targets.map((target,i)=>({target,left:.6+i*3/targets.length,total:.6+i*3/targets.length}));this.emit('cast',{power:'sailor'});return true;}
   summonReno(){const alive=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.gold<1000||this.ultimate||this.ultimateCooldown>0||!alive.length)return false;
@@ -24,6 +25,7 @@
   update(dt){dt=Math.max(0,Math.min(.05,dt));
    if(this.ultimate){const u=this.ultimate;u.age+=dt;if(u.age>=2){const reach=Math.min(1,(u.age-2)/2)*K.pathLength;for(const e of u.targets)if(!u.hit.has(e.id)&&(e.progress<=reach||u.age>=4)){u.hit.add(e.id);this.hurt(e,e.hp*.5,null,true);this.effects.push({kind:'thorns',x:e.x,y:e.y-20,color:'#9aff75',life:.8,age:0});}}if(u.age>=u.life){this.ultimate=null;this.enemies=this.enemies.filter(e=>e.hp>0);}return;}
    if(this.status!=='wave'){super.update(dt);return;}
+   for(const arrow of this.volley){arrow.left-=dt;if(arrow.left<=0&&arrow.target.hp>0){arrow.target.volleyLeft=5;arrow.target.volleyDps=arrow.target.maxHp*.35/5;arrow.target.volleyOwner=arrow.owner;}}this.volley=this.volley.filter(a=>a.left>0);
    for(const bomb of this.hellfire){bomb.left-=dt;if(bomb.left<=0&&bomb.target.hp>0){const e=bomb.target;this.hurt(e,e.maxHp*.35,null,true);this.effects.push({kind:'cannon',x:e.x,y:e.y-25,radius:80,hellfire:true,color:'#ffb34b',life:.8,age:0});this.emit('impact',{power:'sailor'});}}this.hellfire=this.hellfire.filter(b=>b.left>0);
    this.ultimateCooldown=Math.max(0,this.ultimateCooldown-dt);
    for(const t of this.towers.filter(t=>t.type==='lady')){let healing=false;for(const other of this.towers)if(other.hp<other.maxHp&&dist(t,other)<=K.stats(t).range){other.hp=Math.min(other.maxHp,other.hp+4*t.level*dt);healing=true;if((t.healPulse||0)<=this.time)this.effects.push({kind:'heal',x:t.x,y:t.y-65,tx:other.x,ty:other.y-40,color:'#afffe0',life:1,age:0});}if(healing&&(t.healPulse||0)<=this.time)t.healPulse=this.time+1;}
@@ -35,7 +37,7 @@
    for(const a of this.allies){if(a.hp<=0)continue;const target=this.enemies.filter(e=>e.hp>0).sort((x,y)=>dist(a,x)-dist(a,y))[0];if(!target)continue;const delta=target.progress-a.progress;a.progress+=Math.sign(delta)*Math.min(Math.abs(delta),100*dt);Object.assign(a,K.position(a.progress));a.cooldown-=dt;a.inCombat=dist(a,target)<38;if(a.inCombat){if(!engaged.some(p=>p[0]===target)){engaged.push([target,target.speed]);target.speed=0;}a.hp-=dt*(target.kind==='boss'?80:target.kind==='brute'?40:22);if(a.cooldown<=0){a.cooldown=.8;this.hurt(target,a.damage,a.owner);for(const nearby of this.enemies)if(nearby!==target&&nearby.hp>0&&dist(nearby,target)<=65)this.hurt(nearby,a.damage*.5,a.owner);this.effects.push({kind:'cannon',x:target.x,y:target.y-20,radius:65,color:'#b7ff80',life:.4,age:0});this.effects.push({kind:'thorns',x:target.x,y:target.y-25,color:'#b7ff80',life:.4,age:0});}}}
    this.allies=this.allies.filter(a=>a.hp>0);
    const previousStage=this.stage;super.update(dt);for(const [e,speed] of engaged)e.speed=speed;
-   if(this.stage!==previousStage){this.freezeUsed=false;this.freezeCharges=2;this.freezeUntil=0;this.hellfireUsed=false;this.hellfire=[];this.reverseUsed=false;this.reverseUntil=0;this.allies=[];this.conversions=[];this.shadowHits=[];}
+   if(this.stage!==previousStage){this.freezeUsed=false;this.freezeCharges=2;this.freezeUntil=0;this.hellfireUsed=false;this.hellfire=[];this.reverseUsed=false;this.reverseUntil=0;this.volleyUsed=false;this.volleyUntil=0;this.volley=[];this.allies=[];this.conversions=[];this.shadowHits=[];}
    if(this.status==='build'||this.status==='won'||this.status==='lost'){this.hellfire=[];this.conversions=[];this.shadowHits=[];}
   }
  }
