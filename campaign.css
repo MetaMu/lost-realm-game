@@ -7,6 +7,7 @@
 .wave-button,.ashen .wave-button{padding:17px 18px;font-size:15.4px;line-height:1.25;border:1px solid #a57520;border-radius:9px;background:linear-gradient(135deg,#ffe59a,#e8b849 65%,#c9952c);color:#352707;font-weight:750;box-shadow:0 3px 9px #73521c30,inset 0 1px 0 #fff4c8;min-height:55px}
 .wave-button:disabled{background:#d8c99f;color:#655b40;box-shadow:none;cursor:not-allowed}
 .wave-button:focus-visible{outline:3px solid #294d38;outline-offset:3px}
+#hellfireBtn{position:absolute;left:20px;bottom:142px;width:235px;max-width:65%;margin:0;z-index:3;padding:10px;font-size:10px;background:#73351d;color:#ffe4a1}.ultimate-active #hellfireBtn{visibility:hidden}
 .ashen #powerBadge{background:#493e2a;color:#ffedca}
 button:focus-visible,a:focus-visible{outline:3px solid #b78432;outline-offset:4px}
 @media(max-width:600px){.masthead{flex-wrap:wrap;gap:14px}.masthead nav{flex-wrap:wrap;gap:12px}.page{width:94%}.route-label{display:none}}
