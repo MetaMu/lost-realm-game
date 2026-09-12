@@ -7,7 +7,7 @@
 .wave-button,.ashen .wave-button{padding:17px 18px;font-size:15.4px;line-height:1.25;border:1px solid #a57520;border-radius:9px;background:linear-gradient(135deg,#ffe59a,#e8b849 65%,#c9952c);color:#352707;font-weight:750;box-shadow:0 3px 9px #73521c30,inset 0 1px 0 #fff4c8;min-height:55px}
 .wave-button:disabled{background:#d8c99f;color:#655b40;box-shadow:none;cursor:not-allowed}
 .wave-button:focus-visible{outline:3px solid #294d38;outline-offset:3px}
-#hellfireBtn{--spell:#ff9851;--spell-dark:#562317;left:130px}.ultimate-active #hellfireBtn{visibility:hidden}
+:is(#hellfireBtn,#reverseBtn){--spell:#ff9851;--spell-dark:#562317;left:130px}.ultimate-active :is(#hellfireBtn,#reverseBtn){visibility:hidden}
 .ashen #powerBadge{background:#493e2a;color:#ffedca}
 button:focus-visible,a:focus-visible{outline:3px solid #b78432;outline-offset:4px}
 @media(max-width:600px){.masthead{flex-wrap:wrap;gap:14px}.masthead nav{flex-wrap:wrap;gap:12px}.page{width:94%}.route-label{display:none}}
@@ -16,14 +16,16 @@ button:focus-visible,a:focus-visible{outline:3px solid #b78432;outline-offset:4p
 #renoBtn{position:absolute;left:20px;bottom:54px;width:235px;max-width:65%;margin:0;z-index:3;padding:10px;font-size:10px}.ultimate-active .map-header,.ultimate-active .map-footer,.ultimate-active #renoBtn{visibility:hidden}.ultimate-active .pads{visibility:hidden}
 #soundBtn{width:auto;min-width:66px;border-radius:18px;padding:0 10px;font-size:11px;font-weight:700;white-space:nowrap}
 #freezeBtn{--spell:#77f6ff;--spell-dark:#143b50;left:20px}.ultimate-active #freezeBtn{visibility:hidden}
-#freezeBtn,#hellfireBtn{position:absolute;bottom:105px;width:98px;height:98px;max-width:none;margin:0;z-index:3;padding:29px 7px 10px;border-radius:50%;border:2px solid var(--spell);background:radial-gradient(circle at 35% 20%,var(--spell-dark),#101e21 75%);color:#fff4d4;font:700 10px/1.3 "Segoe UI",sans-serif;white-space:pre-line;text-align:center;letter-spacing:.2px;text-shadow:0 0 8px var(--spell);box-shadow:0 0 0 4px #142722,0 0 0 6px #a79657,0 0 22px var(--spell),inset 0 0 17px var(--spell-dark);transition:transform .15s,box-shadow .15s,filter .15s;touch-action:manipulation}
-#freezeBtn::before,#hellfireBtn::before{position:absolute;top:5px;left:0;width:100%;font-size:25px;line-height:1;color:var(--spell);content:'❄';text-shadow:0 0 12px var(--spell)}
-#hellfireBtn::before{content:'✹'}
-#freezeBtn::after,#hellfireBtn::after{content:'';position:absolute;inset:5px;border:1px dashed var(--spell);border-radius:50%;opacity:.6;pointer-events:none}
-#freezeBtn:not(:disabled):hover,#hellfireBtn:not(:disabled):hover{transform:translateY(-3px) scale(1.04);filter:brightness(1.15)}
-#freezeBtn:not(:disabled):active,#hellfireBtn:not(:disabled):active{transform:translateY(3px) scale(.93);box-shadow:0 0 0 4px #142722,0 0 30px var(--spell),inset 0 3px 12px #000}
-#freezeBtn:disabled,#hellfireBtn:disabled{opacity:.7;filter:saturate(.35);box-shadow:0 0 0 3px #142722,inset 0 0 12px #000;cursor:not-allowed}
-#freezeBtn:focus-visible,#hellfireBtn:focus-visible{outline:3px solid #fff6c1;outline-offset:8px}
-@media(max-width:480px){#freezeBtn,#hellfireBtn{width:76px;height:76px;bottom:100px;font-size:8px;padding:23px 4px 7px}#freezeBtn{left:14px}#hellfireBtn{left:102px}#freezeBtn::before,#hellfireBtn::before{font-size:20px}}
-@media(prefers-reduced-motion:reduce){#freezeBtn,#hellfireBtn{transition:none}#freezeBtn:not(:disabled):hover,#hellfireBtn:not(:disabled):hover,#freezeBtn:not(:disabled):active,#hellfireBtn:not(:disabled):active{transform:none}}
+#freezeBtn,:is(#hellfireBtn,#reverseBtn){position:absolute;bottom:105px;width:98px;height:98px;max-width:none;margin:0;z-index:3;padding:29px 7px 10px;border-radius:50%;border:2px solid var(--spell);background:radial-gradient(circle at 35% 20%,var(--spell-dark),#101e21 75%);color:#fff4d4;font:700 10px/1.3 "Segoe UI",sans-serif;white-space:pre-line;text-align:center;letter-spacing:.2px;text-shadow:0 0 8px var(--spell);box-shadow:0 0 0 4px #142722,0 0 0 6px #a79657,0 0 22px var(--spell),inset 0 0 17px var(--spell-dark);transition:transform .15s,box-shadow .15s,filter .15s;touch-action:manipulation}
+#freezeBtn::before,:is(#hellfireBtn,#reverseBtn)::before{position:absolute;top:5px;left:0;width:100%;font-size:25px;line-height:1;color:var(--spell);content:'❄';text-shadow:0 0 12px var(--spell)}
+:is(#hellfireBtn,#reverseBtn)::before{content:'✹'}
+#freezeBtn::after,:is(#hellfireBtn,#reverseBtn)::after{content:'';position:absolute;inset:5px;border:1px dashed var(--spell);border-radius:50%;opacity:.6;pointer-events:none}
+#freezeBtn:not(:disabled):hover,:is(#hellfireBtn,#reverseBtn):not(:disabled):hover{transform:translateY(-3px) scale(1.04);filter:brightness(1.15)}
+#freezeBtn:not(:disabled):active,:is(#hellfireBtn,#reverseBtn):not(:disabled):active{transform:translateY(3px) scale(.93);box-shadow:0 0 0 4px #142722,0 0 30px var(--spell),inset 0 3px 12px #000}
+#freezeBtn:disabled,:is(#hellfireBtn,#reverseBtn):disabled{opacity:.7;filter:saturate(.35);box-shadow:0 0 0 3px #142722,inset 0 0 12px #000;cursor:not-allowed}
+#freezeBtn:focus-visible,:is(#hellfireBtn,#reverseBtn):focus-visible{outline:3px solid #fff6c1;outline-offset:8px}
+@media(max-width:480px){#freezeBtn,:is(#hellfireBtn,#reverseBtn){width:76px;height:76px;bottom:100px;font-size:8px;padding:23px 4px 7px}#freezeBtn{left:14px}:is(#hellfireBtn,#reverseBtn){left:102px}#freezeBtn::before,:is(#hellfireBtn,#reverseBtn)::before{font-size:20px}}
+@media(prefers-reduced-motion:reduce){#freezeBtn,:is(#hellfireBtn,#reverseBtn){transition:none}#freezeBtn:not(:disabled):hover,:is(#hellfireBtn,#reverseBtn):not(:disabled):hover,#freezeBtn:not(:disabled):active,:is(#hellfireBtn,#reverseBtn):not(:disabled):active{transform:none}}
 .leader-submit{display:grid;gap:10px;margin:20px 0}.leader-submit input{padding:12px;border:1px solid #647c60;border-radius:8px;font:inherit;width:100%;box-sizing:border-box}.leader-list{padding-left:25px;max-height:45vh;overflow:auto}.leader-list li{padding:10px;border-bottom:1px solid #647c6044}.leader-list span{font-size:13px}.masthead nav{flex-wrap:wrap}
+#reverseBtn{--spell:#c391ff;--spell-dark:#38234f;left:240px}#reverseBtn::before{content:'↶'}
+@media(max-width:480px){#reverseBtn{left:190px}}

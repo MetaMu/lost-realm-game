@@ -8,7 +8,7 @@
  const baseStats=K.stats;K.stats=t=>{const s=baseStats(t);if(t.type==='lady'||t.type==='phil')s.interval=K.TYPES[t.type].interval;return s;};
  const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
  class CampaignGame extends Base {
-  reset(){super.reset();this.allies=[];this.conversions=[];this.shadowHits=[];this.ultimate=null;this.ultimateCooldown=0;this.freezeUsed=false;this.freezeCharges=2;this.freezeUntil=0;this.hellfireUsed=false;this.hellfire=[];}
+  reset(){super.reset();this.allies=[];this.conversions=[];this.shadowHits=[];this.ultimate=null;this.ultimateCooldown=0;this.freezeUsed=false;this.freezeCharges=2;this.freezeUntil=0;this.hellfireUsed=false;this.hellfire=[];this.reverseUsed=false;this.reverseUntil=0;}
   place(type,pad){const t=super.place(type,pad);if(t&&(type==='lady'||type==='phil'))t.cooldown=K.TYPES[type].interval;return t;}
   target(t){if(t.type==='lady')return this.enemies.find(e=>e.hp>0&&e.mutated&&e.kind!=='boss'&&!this.conversions.some(c=>c.target===e)&&dist(t,e)<=K.stats(t).range);if(t.type==='phil'&&this.shadowHits.length)return null;return super.target(t);}
   fire(t,e){
@@ -17,6 +17,7 @@
    super.fire(t,e);
   }
   freezeKnowME(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.freezeCharges<=0||this.freezeUntil>this.time||this.ultimate||!this.towers.some(t=>t.type==='knowme')||!targets.length)return false;this.freezeCharges--;this.freezeUsed=this.freezeCharges===0;this.freezeUntil=this.time+5;for(const e of targets)e.frozenUntil=this.freezeUntil;this.emit('cast',{power:'knowme'});return true;}
+  reverseHost(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.ultimate||this.reverseUsed||!this.towers.some(t=>t.type==='host')||!targets.length)return false;this.reverseUsed=true;this.reverseUntil=this.time+10;for(const e of targets)e.reverseUntil=this.reverseUntil;this.emit('cast',{power:'host'});return true;}
   summonHellfire(){const targets=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.ultimate||this.hellfireUsed||!this.towers.some(t=>t.type==='sailor')||!targets.length)return false;this.hellfireUsed=true;this.hellfire=targets.map((target,i)=>({target,left:.6+i*3/targets.length,total:.6+i*3/targets.length}));this.emit('cast',{power:'sailor'});return true;}
   summonReno(){const alive=this.enemies.filter(e=>e.hp>0&&e.x>=0&&e.x<=K.WIDTH);if(this.status!=='wave'||this.gold<1000||this.ultimate||this.ultimateCooldown>0||!alive.length)return false;
    this.gold-=1000;this.ultimateCooldown=45;this.ultimate={age:0,life:4.5,targets:alive,hit:new Set()};this.emit('ultimateStart');return true;}
@@ -34,7 +35,7 @@
    for(const a of this.allies){if(a.hp<=0)continue;const target=this.enemies.filter(e=>e.hp>0).sort((x,y)=>dist(a,x)-dist(a,y))[0];if(!target)continue;const delta=target.progress-a.progress;a.progress+=Math.sign(delta)*Math.min(Math.abs(delta),100*dt);Object.assign(a,K.position(a.progress));a.cooldown-=dt;a.inCombat=dist(a,target)<38;if(a.inCombat){if(!engaged.some(p=>p[0]===target)){engaged.push([target,target.speed]);target.speed=0;}a.hp-=dt*(target.kind==='boss'?80:target.kind==='brute'?40:22);if(a.cooldown<=0){a.cooldown=.8;this.hurt(target,a.damage,a.owner);for(const nearby of this.enemies)if(nearby!==target&&nearby.hp>0&&dist(nearby,target)<=65)this.hurt(nearby,a.damage*.5,a.owner);this.effects.push({kind:'cannon',x:target.x,y:target.y-20,radius:65,color:'#b7ff80',life:.4,age:0});this.effects.push({kind:'thorns',x:target.x,y:target.y-25,color:'#b7ff80',life:.4,age:0});}}}
    this.allies=this.allies.filter(a=>a.hp>0);
    const previousStage=this.stage;super.update(dt);for(const [e,speed] of engaged)e.speed=speed;
-   if(this.stage!==previousStage){this.freezeUsed=false;this.freezeCharges=2;this.freezeUntil=0;this.hellfireUsed=false;this.hellfire=[];this.allies=[];this.conversions=[];this.shadowHits=[];}
+   if(this.stage!==previousStage){this.freezeUsed=false;this.freezeCharges=2;this.freezeUntil=0;this.hellfireUsed=false;this.hellfire=[];this.reverseUsed=false;this.reverseUntil=0;this.allies=[];this.conversions=[];this.shadowHits=[];}
    if(this.status==='build'||this.status==='won'||this.status==='lost'){this.hellfire=[];this.conversions=[];this.shadowHits=[];}
   }
  }

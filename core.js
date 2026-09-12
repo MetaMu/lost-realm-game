@@ -87,7 +87,7 @@
       for(const e of this.enemies){
         if(e.hp<=0)continue;if(e.poisonUntil>this.time)this.hurt(e,e.poisonDps*dt*(e.kind==='venom'?.25:1),e.poisonOwner,true);if(e.hp<=0)continue;
         e.enraged=e.kind==='brute'&&e.hp<e.maxHp*.5;
-        e.progress+=(e.frozenUntil>this.time?0:e.speed)*dt*(e.enraged?1.4:1)*(e.slowUntil>this.time?1-e.slow:1);Object.assign(e,position(e.progress));
+        const backwards=e.reverseUntil>this.time;e.progress=Math.max(0,e.progress+(backwards?-1:1)*(e.frozenUntil>this.time?0:e.speed)*dt*(e.enraged?1.4:1)*(e.slowUntil>this.time?1-e.slow:1));Object.assign(e,position(e.progress));if(backwards)e.direction*=-1;
         if(e.kind==='venom'&&!(e.frozenUntil>this.time)&&e.progress<pathLength){e.attackCooldown=(e.attackCooldown||0)-dt;const victim=this.towers.filter(t=>distance(e,t)<=155).sort((a,b)=>distance(e,a)-distance(e,b))[0];if(victim){victim.hp=Math.max(0,victim.hp-(e.mutated?27:18)*.25*1.1/1.3*dt);if(e.attackCooldown<=0){e.attackCooldown=1.3;this.effects.push({kind:'lightning',x:e.x,y:e.y-35,tx:victim.x,ty:victim.y-55,color:'#89ff43',life:.45,age:0});}this.emit('towerHit',{tower:victim});if(victim.hp===0){this.towers=this.towers.filter(t=>t!==victim);this.projectiles=this.projectiles.filter(p=>p.owner!==victim);this.effects.push({kind:'cannon',x:victim.x,y:victim.y-30,radius:45,color:'#89ff43',life:.8,age:0});this.emit('towerDestroyed',{tower:victim});}}}
         if(e.progress>=pathLength){e.hp=0;this.lives=Math.max(0,this.lives-e.leak);this.waveLeaks+=e.leak;this.emit('leak',{amount:e.leak});}
       }
