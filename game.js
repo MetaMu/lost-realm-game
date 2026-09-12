@@ -57,7 +57,7 @@
     $('#waveProgress').style.width=game.status==='wave'?Math.min(100,game.waveTime/(K.wavePlan(game.wave,game.stage).at(-1).at+8)*100)+'%':'0%';
     $('#waveName').textContent=next===K.stageWaves(game.stage)?'The final reckoning':plan.some(e=>e.kind==='boss')?'A crowned menace':'Flock '+next;
     $('#waveComposition').textContent=plan.length+(game.stage>=2?' mutated enemies':' enemies')+(plan.some(e=>e.kind==='boss')?' · BOSS':'');
-    $('#waveDescription').textContent=game.stage>=2?'Mutant health ×'+(game.stage===3?'4.5':'3.4')+'. '+(game.stage===2?'Lady Never Scared unlocked.':'Phil Heal unlocked.')+' Gold carries over; rebuild your guardians.':'Enemy health reduced 10% (2.7× original). Poison arrives in wave 5 and slowly corrodes towers. Replace fallen guardians on their cleared pads.';
+    $('#waveDescription').textContent=game.stage>=2?'Mutant health ×'+(game.stage===3?'4.5':'2.38')+'. '+(game.stage===2?'Lady Never Scared unlocked.':'Phil Heal unlocked.')+' Gold carries over; rebuild your guardians.':'Enemy health reduced 10% (2.7× original). Poison arrives in wave 5 and slowly corrodes towers. Replace fallen guardians on their cleared pads.';
     $('#waveBtn').disabled=game.status!=='build';const label=game.status==='won'?'Campaign complete ✦':'Send wave '+next+' →';if($('#waveBtn').textContent!==label)$('#waveBtn').textContent=label;refreshPads();
   }
   function toast(s){const el=$('#toast');el.textContent=s;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2400)}
