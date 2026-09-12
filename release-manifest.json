@@ -2,9 +2,14 @@
   "version": "1.2.0-beta.2",
   "files": [
     {
+      "file": "leaderboard.js",
+      "bytes": 4754,
+      "sha256": "d34a33d1e962912ca74591460b70ac20c527c53bf27aed243ac2caf6c0ba4b6f"
+    },
+    {
       "file": "index.html",
-      "bytes": 6805,
-      "sha256": "d9f68f6bcbde1f38fcc79169b8fbf6f46f2df89ec41d831705839f3b6ed6f3fb"
+      "bytes": 6843,
+      "sha256": "6aea43ef505b2d2787dd3d3c529445c13efdb0cc1d4499b44876f105985de582"
     },
     {
       "file": "style.css",
@@ -13,8 +18,8 @@
     },
     {
       "file": "campaign.css",
-      "bytes": 1494,
-      "sha256": "cf66cbaac6ceaca1b429491532c82a13a76c4c82d421147442a38a8c36a1b42c"
+      "bytes": 1855,
+      "sha256": "7db31a3c6a31c1e099a92bcae6e863475f19f67d94b73dd320220ba6686a4d58"
     },
     {
       "file": "core.js",
@@ -23,8 +28,8 @@
     },
     {
       "file": "game.js",
-      "bytes": 18951,
-      "sha256": "1aa88e904cb4c5c333be03777081a1c3fb78e8557e4abd2a590c1212dcfd9244"
+      "bytes": 19085,
+      "sha256": "65784c694aaab17aa832b6f437dded96b756ab5a37fda157c46c3ad3cf6b09d1"
     },
     {
       "file": "sprite.js",
