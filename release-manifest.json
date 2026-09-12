@@ -1,10 +1,10 @@
 {
-  "version": "1.1.0-beta.2",
+  "version": "1.1.0-beta.3",
   "files": [
     {
       "file": "index.html",
-      "bytes": 6399,
-      "sha256": "274fbd548d5012293f6ea8ff30227a7e0ed4dc8fae539e6b8d19a44538f3444a"
+      "bytes": 6429,
+      "sha256": "18134e1530612f8a1b44f389742ed02fb1ae2b2b9e0e7f273a44df8b7710b65f"
     },
     {
       "file": "style.css",
@@ -18,13 +18,13 @@
     },
     {
       "file": "core.js",
-      "bytes": 10999,
-      "sha256": "cb674b70df2ef5c67b7162805f2d2a1b8ff68fa365f292c29db21b46581ae13f"
+      "bytes": 11073,
+      "sha256": "a0e1a907c1087930956b9016333fc92aa759975c76ba3986b0609cb28c5f17be"
     },
     {
       "file": "game.js",
-      "bytes": 19062,
-      "sha256": "8764d7f417d29ef7f4ba7138da7b640ff62efede060b5445248568f6350544f8"
+      "bytes": 16567,
+      "sha256": "af1d34237d1f867ca8f6ace85088fd760b9b5bf4adafec23956a0af590763cc8"
     },
     {
       "file": "sprite.js",
@@ -33,8 +33,13 @@
     },
     {
       "file": "audio.js",
-      "bytes": 1531,
-      "sha256": "8b95d244201970c77182faeadc388bcc042ec52f50d7251c1dbf3c5e737bf6cc"
+      "bytes": 3445,
+      "sha256": "edbef848684537c2e2ec60822f241bf3892967a9d6609e1c4e27653c5e162e07"
+    },
+    {
+      "file": "vfx.js",
+      "bytes": 6081,
+      "sha256": "1acf40a3d0991af292216a54c3acd9ddba71cf95dedc05efd224d3035f7b53f5"
     },
     {
       "file": "bestiary.html",

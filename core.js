@@ -52,7 +52,7 @@
     spawn(kind){const spec=ENEMIES[kind],hp=spec.hp*3*(1+(this.wave-1)*.2)*(this.stage===2?3.4:1);const e={...spec,mutated:this.stage===2,speed:spec.speed*(this.stage===2?1.2:1),armor:Math.min(.65,spec.armor+(this.stage===2?.12:0)),id:this.nextId++,kind,hp,maxHp:hp,progress:0,slowUntil:0,slow:0,poisonUntil:0,poisonDps:0,poisonOwner:null,...position(0)};this.enemies.push(e);return e;}
     hurt(e,amount,owner,pierce=false){
       if(e.hp<=0)return;const damage=amount*(pierce?1:1-e.armor);if(owner)owner.damageDealt+=Math.min(e.hp,damage);e.hp-=damage;
-      if(e.hp<=0){this.gold+=e.bounty;this.kills++;if(owner)owner.kills++;this.emit('kill',{x:e.x,y:e.y,bounty:e.bounty});this.effects.push({kind:'burst',x:e.x,y:e.y-25,color:'#eac874',life:.45,age:0});}
+      if(e.hp<=0){this.gold+=e.bounty;this.kills++;if(owner)owner.kills++;this.emit('kill',{x:e.x,y:e.y,bounty:e.bounty});this.effects.push({kind:e.slowUntil>this.time?'shatter':'burst',x:e.x,y:e.y-25,color:'#eac874',life:.45,age:0});}
     }
     target(t){const s=stats(t);return this.enemies.filter(e=>e.hp>0&&distance(e,t)<=s.range).sort(t.targetMode==='strongest'?(a,b)=>b.hp-a.hp:(a,b)=>b.progress-a.progress)[0];}
     fire(t,e){
@@ -70,6 +70,7 @@
     }
     impact(p){
       const t=p.owner,e=p.target;
+      this.emit('impact',{power:p.kind});
       if(p.kind==='sailor'||p.kind==='knowme'){
         const radius=p.kind==='sailor'?80+t.level*7:62;
         this.effects.push({kind:p.kind==='sailor'?'cannon':'spores',x:p.tx,y:p.ty+15,radius,color:p.color,life:p.kind==='sailor'?.62:.9,age:0});
