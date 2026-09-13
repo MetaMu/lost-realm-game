@@ -14,7 +14,7 @@
     {
       "file": "index.html",
       "bytes": 8272,
-      "sha256": "dbb4b397f98b93b721710dbe3ee9e2bb973ffae53129f71a7852e85b620ae904"
+      "sha256": "476381e1024d242b8ac56e3c94c1979c7af935a8ca8c6bf9812d42867e90b5dc"
     },
     {
       "file": "style.css",
@@ -33,8 +33,8 @@
     },
     {
       "file": "game.js",
-      "bytes": 33005,
-      "sha256": "fc66387782a8201dc6e8d905480ed950b3913cab0b86bb5845a9172a1e364e20"
+      "bytes": 33104,
+      "sha256": "eea8b2e31a805a68eec90294e548c0087318d32cadd1b25b044acd2602a20955"
     },
     {
       "file": "sprite.js",
