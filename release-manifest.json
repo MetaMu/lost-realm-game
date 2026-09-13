@@ -14,7 +14,7 @@
     {
       "file": "index.html",
       "bytes": 8272,
-      "sha256": "f8bcde12a9ff94b6c7e8fb00a45fa43a3a23725e9519a4157ca6334b5960f9f6"
+      "sha256": "dbb4b397f98b93b721710dbe3ee9e2bb973ffae53129f71a7852e85b620ae904"
     },
     {
       "file": "style.css",
@@ -23,8 +23,8 @@
     },
     {
       "file": "campaign.css",
-      "bytes": 11800,
-      "sha256": "009e305ab6bc362fcb74638645408316dca7ef0b862fa6c87829cb0cfe30efe4"
+      "bytes": 13308,
+      "sha256": "ce71be687a1f0b1d9ab1b767c1c478fda69b71a83861570cc5fc4ee8ed389b7d"
     },
     {
       "file": "core.js",
@@ -33,8 +33,8 @@
     },
     {
       "file": "game.js",
-      "bytes": 31748,
-      "sha256": "18485fae46d432aee077ad2ebf686666f2bee80839efc6a4f1907dc1ffbfc15a"
+      "bytes": 33005,
+      "sha256": "fc66387782a8201dc6e8d905480ed950b3913cab0b86bb5845a9172a1e364e20"
     },
     {
       "file": "sprite.js",

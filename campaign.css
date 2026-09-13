@@ -59,6 +59,18 @@ html,body{overscroll-behavior-y:none}
 #towerQuick[hidden]{display:none}
 #towerQuick button{min-height:44px;padding:8px 12px;border-radius:8px;border:1px solid #c5a960;background:#f1d68f;color:#203429;font-weight:700;touch-action:manipulation}
 #towerQuick button:disabled{opacity:.5}#quickClose{margin-left:auto}
+/* Small community-feedback release: controls stay reachable outside Play View. */
+body .play-bar #gnomeDrawerBtn{display:block}
+body:not(.play-view) .play-bar{position:sticky;top:0;z-index:20;background:#f4f1e8;padding:6px;border-radius:12px}
+body:not(.play-view).gnome-drawer-open .roster{display:grid;position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:40;max-height:48dvh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));padding:12px;background:#f4f1e8;border:2px solid #aa955d;border-radius:16px;box-shadow:0 -8px 30px #0006}
+#resumeBtn{width:auto;max-width:90%;min-height:64px;padding:18px 30px;border:2px solid #f6d987;border-radius:999px;background:linear-gradient(140deg,#ffe6a0,#d4ae52);color:#203b2b;font-size:18px;font-weight:800;box-shadow:0 5px 0 #7b602e,0 0 25px #e5c46e55;transition:transform .15s,box-shadow .15s;touch-action:manipulation}
+#resumeBtn:hover{box-shadow:0 5px 0 #7b602e,0 0 35px #e5c46e99}
+#resumeBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #7b602e}
+#resumeBtn:focus-visible{outline:3px solid white;outline-offset:5px}
+.toast{pointer-events:none}
+.toast.wave-celebration{width:min(90vw,480px);white-space:normal;border:1px solid #d8bd75;background:#203b2bf5;color:#fff0bb;text-align:center}
+.wave-celebration small{display:block;margin-top:7px;font-size:12px;line-height:1.4;color:#edf0db}
+@media(prefers-reduced-motion:reduce){#resumeBtn{transition:none}}
 /* Focused play keeps the board ratio and its anchored powers intact. */
 .play-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}.play-bar button{min-height:44px;border:1px solid #84966b;border-radius:10px;background:#203b2b;color:#fff4cc;padding:8px 14px;font-weight:600}.play-bar #gnomeDrawerBtn,.play-bar #playResources,.play-bar #playWaveBtn{display:none}
 body.play-view{overflow:hidden;background:#14251b}.play-view .masthead,.play-view .mission,.play-view .sidebar,.play-view .page-footer,.play-view .roster-heading{display:none}.play-view .page{width:100%;max-width:none}.play-view .layout{display:block}.play-view .battle-column{position:fixed;inset:0;z-index:30;background:#14251b;display:flex;flex-direction:column;align-items:center;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}.play-view .play-bar{flex:none;min-height:54px;margin:0;width:100%;justify-content:center;padding:4px 8px;color:#fff4cc}.play-view .play-bar #gnomeDrawerBtn,.play-view .play-bar #playResources,.play-view .play-bar #playWaveBtn{display:block}.play-view #playResources{font-size:12px}.play-view .arena{flex:none;width:min(100%,calc((100dvh - 110px - env(safe-area-inset-top) - env(safe-area-inset-bottom))*1.5));margin:auto;border-width:2px}.play-view .roster{display:none}.play-view.gnome-drawer-open .roster{display:grid;position:absolute;z-index:40;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));max-height:55dvh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;grid-template-columns:repeat(7,minmax(90px,1fr));background:#f4f1e8;padding:12px;border:2px solid #aa955d;border-radius:14px;box-shadow:0 -10px 35px #0008}.play-view #towerQuick{z-index:45}.play-view~.toast,.toast{z-index:60}.play-view .map-controls{top:12%;bottom:auto}.play-view .map-controls button{min-width:44px;min-height:44px}
