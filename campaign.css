@@ -7,7 +7,7 @@
 .wave-button,.ashen .wave-button{padding:17px 18px;font-size:15.4px;line-height:1.25;border:1px solid #a57520;border-radius:9px;background:linear-gradient(135deg,#ffe59a,#e8b849 65%,#c9952c);color:#352707;font-weight:750;box-shadow:0 3px 9px #73521c30,inset 0 1px 0 #fff4c8;min-height:55px}
 .wave-button:disabled{background:#d8c99f;color:#655b40;box-shadow:none;cursor:not-allowed}
 .wave-button:focus-visible{outline:3px solid #294d38;outline-offset:3px}
-:is(#hellfireBtn,#reverseBtn,#volleyBtn){--spell:#ff9851;--spell-dark:#562317;left:130px}.ultimate-active :is(#hellfireBtn,#reverseBtn,#volleyBtn){visibility:hidden}
+:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn){--spell:#ff9851;--spell-dark:#562317;left:130px}.ultimate-active :is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn){visibility:hidden}
 .ashen #powerBadge{background:#493e2a;color:#ffedca}
 button:focus-visible,a:focus-visible{outline:3px solid #b78432;outline-offset:4px}
 @media(max-width:600px){.masthead{flex-wrap:wrap;gap:14px}.masthead nav{flex-wrap:wrap;gap:12px}.page{width:94%}.route-label{display:none}}
@@ -16,16 +16,16 @@ button:focus-visible,a:focus-visible{outline:3px solid #b78432;outline-offset:4p
 #renoBtn{position:absolute;left:20px;bottom:54px;width:235px;max-width:65%;margin:0;z-index:3;padding:10px;font-size:10px}.ultimate-active .map-header,.ultimate-active .map-footer,.ultimate-active #renoBtn{visibility:hidden}.ultimate-active .pads{visibility:hidden}
 #soundBtn{width:auto;min-width:66px;border-radius:18px;padding:0 10px;font-size:11px;font-weight:700;white-space:nowrap}
 #freezeBtn{--spell:#77f6ff;--spell-dark:#143b50;left:20px}.ultimate-active #freezeBtn{visibility:hidden}
-#freezeBtn,:is(#hellfireBtn,#reverseBtn,#volleyBtn){position:absolute;bottom:105px;width:98px;height:98px;max-width:none;margin:0;z-index:3;padding:29px 7px 10px;border-radius:50%;border:2px solid var(--spell);background:radial-gradient(circle at 35% 20%,var(--spell-dark),#101e21 75%);color:#fff4d4;font:700 10px/1.3 "Segoe UI",sans-serif;white-space:pre-line;text-align:center;letter-spacing:.2px;text-shadow:0 0 8px var(--spell);box-shadow:0 0 0 4px #142722,0 0 0 6px #a79657,0 0 22px var(--spell),inset 0 0 17px var(--spell-dark);transition:transform .15s,box-shadow .15s,filter .15s;touch-action:manipulation}
-#freezeBtn::before,:is(#hellfireBtn,#reverseBtn,#volleyBtn)::before{position:absolute;top:5px;left:0;width:100%;font-size:25px;line-height:1;color:var(--spell);content:'❄';text-shadow:0 0 12px var(--spell)}
-:is(#hellfireBtn,#reverseBtn,#volleyBtn)::before{content:'✹'}
-#freezeBtn::after,:is(#hellfireBtn,#reverseBtn,#volleyBtn)::after{content:'';position:absolute;inset:5px;border:1px dashed var(--spell);border-radius:50%;opacity:.6;pointer-events:none}
-#freezeBtn:not(:disabled):hover,:is(#hellfireBtn,#reverseBtn,#volleyBtn):not(:disabled):hover{transform:translateY(-3px) scale(1.04);filter:brightness(1.15)}
-#freezeBtn:not(:disabled):active,:is(#hellfireBtn,#reverseBtn,#volleyBtn):not(:disabled):active{transform:translateY(3px) scale(.93);box-shadow:0 0 0 4px #142722,0 0 30px var(--spell),inset 0 3px 12px #000}
-#freezeBtn:disabled,:is(#hellfireBtn,#reverseBtn,#volleyBtn):disabled{opacity:.7;filter:saturate(.35);box-shadow:0 0 0 3px #142722,inset 0 0 12px #000;cursor:not-allowed}
-#freezeBtn:focus-visible,:is(#hellfireBtn,#reverseBtn,#volleyBtn):focus-visible{outline:3px solid #fff6c1;outline-offset:8px}
-@media(max-width:480px){#freezeBtn,:is(#hellfireBtn,#reverseBtn,#volleyBtn){width:76px;height:76px;bottom:100px;font-size:8px;padding:23px 4px 7px}#freezeBtn{left:14px}:is(#hellfireBtn,#reverseBtn,#volleyBtn){left:102px}#freezeBtn::before,:is(#hellfireBtn,#reverseBtn,#volleyBtn)::before{font-size:20px}}
-@media(prefers-reduced-motion:reduce){#freezeBtn,:is(#hellfireBtn,#reverseBtn,#volleyBtn){transition:none}#freezeBtn:not(:disabled):hover,:is(#hellfireBtn,#reverseBtn,#volleyBtn):not(:disabled):hover,#freezeBtn:not(:disabled):active,:is(#hellfireBtn,#reverseBtn,#volleyBtn):not(:disabled):active{transform:none}}
+#freezeBtn,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn){position:absolute;bottom:105px;width:98px;height:98px;max-width:none;margin:0;z-index:3;padding:29px 7px 10px;border-radius:50%;border:2px solid var(--spell);background:radial-gradient(circle at 35% 20%,var(--spell-dark),#101e21 75%);color:#fff4d4;font:700 10px/1.3 "Segoe UI",sans-serif;white-space:pre-line;text-align:center;letter-spacing:.2px;text-shadow:0 0 8px var(--spell);box-shadow:0 0 0 4px #142722,0 0 0 6px #a79657,0 0 22px var(--spell),inset 0 0 17px var(--spell-dark);transition:transform .15s,box-shadow .15s,filter .15s;touch-action:manipulation}
+#freezeBtn::before,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn)::before{position:absolute;top:5px;left:0;width:100%;font-size:25px;line-height:1;color:var(--spell);content:'❄';text-shadow:0 0 12px var(--spell)}
+:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn)::before{content:'✹'}
+#freezeBtn::after,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn)::after{content:'';position:absolute;inset:5px;border:1px dashed var(--spell);border-radius:50%;opacity:.6;pointer-events:none}
+#freezeBtn:not(:disabled):hover,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn):not(:disabled):hover{transform:translateY(-3px) scale(1.04);filter:brightness(1.15)}
+#freezeBtn:not(:disabled):active,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn):not(:disabled):active{transform:translateY(3px) scale(.93);box-shadow:0 0 0 4px #142722,0 0 30px var(--spell),inset 0 3px 12px #000}
+#freezeBtn:disabled,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn):disabled{opacity:.7;filter:saturate(.35);box-shadow:0 0 0 3px #142722,inset 0 0 12px #000;cursor:not-allowed}
+#freezeBtn:focus-visible,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn):focus-visible{outline:3px solid #fff6c1;outline-offset:8px}
+@media(max-width:480px){#freezeBtn,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn){width:76px;height:76px;bottom:100px;font-size:8px;padding:23px 4px 7px}#freezeBtn{left:14px}:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn){left:102px}#freezeBtn::before,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn)::before{font-size:20px}}
+@media(prefers-reduced-motion:reduce){#freezeBtn,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn){transition:none}#freezeBtn:not(:disabled):hover,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn):not(:disabled):hover,#freezeBtn:not(:disabled):active,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn):not(:disabled):active{transform:none}}
 .leader-submit{display:grid;gap:10px;margin:20px 0}.leader-submit input{padding:12px;border:1px solid #647c60;border-radius:8px;font:inherit;width:100%;box-sizing:border-box}.leader-list{padding-left:25px;max-height:45vh;overflow:auto}.leader-list li{padding:10px;border-bottom:1px solid #647c6044}.leader-list span{font-size:13px}.masthead nav{flex-wrap:wrap}
 #reverseBtn{--spell:#c391ff;--spell-dark:#38234f;left:240px}#reverseBtn::before{content:'↶'}
 @media(max-width:480px){#reverseBtn{left:190px}}
@@ -34,13 +34,28 @@ button:focus-visible,a:focus-visible{outline:3px solid #b78432;outline-offset:4p
 #renoBtn::before{content:'❦';position:absolute;top:-17px;left:calc(50% - 15px);font-size:30px;color:#ffe194;text-shadow:0 0 10px #e5bc46}
 #renoBtn:not(:disabled):active{transform:translate(-50%,-50%) scale(.94);box-shadow:0 0 30px #ffdf78,inset 0 4px 14px #000}
 #renoBtn:disabled{opacity:.8;filter:saturate(.6)}
-@media(max-width:600px){#freezeBtn,:is(#hellfireBtn,#reverseBtn,#volleyBtn){width:64px;height:64px;bottom:70px;font-size:7px;padding:21px 3px 4px}#freezeBtn{left:10px}#hellfireBtn{left:82px}#reverseBtn{left:154px}#volleyBtn{left:226px}#freezeBtn::before,:is(#hellfireBtn,#reverseBtn,#volleyBtn)::before{font-size:18px}}
+@media(max-width:600px){#freezeBtn,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn){width:64px;height:64px;bottom:70px;font-size:7px;padding:21px 3px 4px}#freezeBtn{left:10px}#hellfireBtn{left:82px}#reverseBtn{left:154px}#volleyBtn{left:226px}#freezeBtn::before,:is(#hellfireBtn,#reverseBtn,#volleyBtn,#cleanseBtn)::before{font-size:18px}}
 @media(prefers-reduced-motion:reduce){#renoBtn{transition:none}#renoBtn:not(:disabled):active{transform:translate(-50%,-50%)}}
-#powerGrid{position:absolute;right:22%;bottom:5%;width:20%;max-width:204px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;z-index:4}
+#powerGrid{position:absolute;left:3%;right:auto;bottom:5%;width:20%;max-width:204px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;z-index:4}
 #powerGrid>button{position:relative;inset:auto;width:100%;height:auto;aspect-ratio:1;max-width:none;min-width:0;padding:28% 3% 9%;font-size:clamp(6px,.8vw,10px);letter-spacing:0}
 #powerGrid>button::before{font-size:clamp(15px,2vw,25px)}
 .ultimate-active #powerGrid{visibility:hidden}
 #renoBtn{width:clamp(49.6px,8vw,100.8px);height:clamp(49.6px,8vw,100.8px);display:flex;align-items:center;justify-content:center;text-align:center;padding:8px 4px;border:3px ridge #899a91;border-radius:38% 43% 36% 41%;background:repeating-linear-gradient(28deg,#ffffff06 0 2px,transparent 2px 7px),linear-gradient(135deg,#8c9485,#46584e 45%,#253831 70%,#7b8776);color:#c9fff1;font-size:clamp(7px,.8vw,10.4px);letter-spacing:.4px;text-shadow:0 0 8px #54ffe1;box-shadow:0 0 0 3px #263a31,0 0 0 5px #8f9d7488,0 0 22px #68ffe866,inset 2px 2px 8px #d6e1bd55,inset -3px -4px 12px #12251f}
 #renoBtn::before{content:'ᛟ';font-size:22px;top:-18px;left:calc(50% - 11px);color:#a2ffe8;text-shadow:0 0 12px #42ffcf}
 #renoBtn:not(:disabled):active{box-shadow:0 0 28px #57ffd0,inset 0 4px 12px #102a21}
-@media(max-width:600px){#powerGrid{width:28%;right:22%;bottom:6%;gap:8px}#powerGrid>button{font-size:6px;padding-top:26%}#powerGrid>button::before{font-size:14px;top:3px}}
+@media(max-width:600px){#powerGrid{width:28%;left:3%;right:auto;bottom:6%;gap:8px}#powerGrid>button{font-size:6px;padding-top:26%}#powerGrid>button::before{font-size:14px;top:3px}}
+#powerGrid>#cleanseBtn{--spell:#ffe28b;--spell-dark:#64511a;position:absolute;left:calc(100% + 24px);bottom:0;top:auto;width:calc(50% - 6px);padding:24px 3px 7px}
+#cleanseBtn::before{content:'✦'}
+#powerGrid>#cleanseBtn[hidden]{display:none}
+@media(max-width:600px){#powerGrid>#cleanseBtn{left:calc(100% + 14px);width:calc(50% - 4px);padding:16px 2px 3px}}
+/* Powers stay anchored to the village and Reno's rune stones on every screen. */
+html,body{overscroll-behavior-y:none}
+#powerGrid{left:3%;right:auto;bottom:6%;width:14%;max-width:142.8px;gap:8.4px}
+#powerGrid>button{font-size:clamp(4.5px,.56vw,7px);line-height:1.1;padding:23% 1% 6%}
+#powerGrid>button::before{font-size:clamp(9px,1.4vw,17px);top:3px}
+#powerGrid>#cleanseBtn{left:calc(100% + 12px);right:auto;width:calc(50% - 4.2px);padding:12% 1% 3%}
+@media(max-width:600px){#powerGrid{width:19.6%;gap:5.6px}#powerGrid>#cleanseBtn{left:calc(100% + 9px);width:calc(50% - 2.8px)}#powerGrid>button::before{top:2px}}
+#towerQuick{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:min(92%,620px);z-index:12;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px;background:#203c30f5;color:#fff1c7;border:2px solid #c5a960;border-radius:14px;box-shadow:0 5px 25px #0006;margin:10px 0}
+#towerQuick[hidden]{display:none}
+#towerQuick button{min-height:44px;padding:8px 12px;border-radius:8px;border:1px solid #c5a960;background:#f1d68f;color:#203429;font-weight:700;touch-action:manipulation}
+#towerQuick button:disabled{opacity:.5}#quickClose{margin-left:auto}

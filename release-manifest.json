@@ -2,14 +2,19 @@
   "version": "1.2.0-beta.2",
   "files": [
     {
+      "file": "checkpoint.js",
+      "bytes": 1630,
+      "sha256": "04b035f666004d2a525ccd94a473f030aec5d5f3322a8b84b6feb4c437353d5f"
+    },
+    {
       "file": "leaderboard.js",
       "bytes": 4754,
       "sha256": "d34a33d1e962912ca74591460b70ac20c527c53bf27aed243ac2caf6c0ba4b6f"
     },
     {
       "file": "index.html",
-      "bytes": 7523,
-      "sha256": "571fd2a02a3e1ea52860593bf681a7a69e83a95d9ed117d1dd22394e795ee764"
+      "bytes": 8107,
+      "sha256": "29902a7085d4f1eb2f0d195f4b9a97e908de6328bfc0825fd196141303192aba"
     },
     {
       "file": "style.css",
@@ -18,18 +23,18 @@
     },
     {
       "file": "campaign.css",
-      "bytes": 7821,
-      "sha256": "19c54d1a84b0bd2b03ece084ffc7cc1bec131de9528b9d645d4761e261a47eed"
+      "bytes": 9598,
+      "sha256": "2dd5e21e81d838aa764d933ea36fd90833c76bea473f5817dc9c74503fbafb3f"
     },
     {
       "file": "core.js",
-      "bytes": 12573,
-      "sha256": "0c16d7be2a1d47e2e1b7d0eda787efb74612a7946f10325b2314924ca914b9d5"
+      "bytes": 14912,
+      "sha256": "3b810d46e24d69142e0d600272428fc3489a65d054a6f57bd4767e29fa8357a1"
     },
     {
       "file": "game.js",
-      "bytes": 23186,
-      "sha256": "56248772c13093f43ea6e237144c35ee6bd5b903dffaeceb2d036a83e451389b"
+      "bytes": 29298,
+      "sha256": "6b3013a7cd402dbc4b967d329aea417f7fc5213aa959b33bd525fd80d348b3dd"
     },
     {
       "file": "sprite.js",
@@ -48,8 +53,8 @@
     },
     {
       "file": "campaign.js",
-      "bytes": 8523,
-      "sha256": "c0b036b46a6d4f99b6286c513eb41a9b8a894f2818fb1f7815cc92a75aacc24c"
+      "bytes": 9559,
+      "sha256": "2cded475d6d2b61c240c80dcdcf7ba1591ee5b01ae955eda87ea799839a62666"
     },
     {
       "file": "campaign-vfx.js",
@@ -58,18 +63,18 @@
     },
     {
       "file": "bestiary.html",
-      "bytes": 1474,
-      "sha256": "1ca918988064e66615b254b745f1b537e77e272b579a9148b096c3e323a1b1e6"
+      "bytes": 1516,
+      "sha256": "06e3bfea7c1365501c3ba2af70453acf0a9aaabaa47dda6802d0e503c33b3694"
     },
     {
       "file": "bestiary.js",
-      "bytes": 1956,
-      "sha256": "84b16916b6902d99803cceb3ba01b84d7ec7fb94798d05089d3d5906c2410b31"
+      "bytes": 2428,
+      "sha256": "b66dc2a6025cdf024352986079bdd65735774eb0743f09132701fda7a5474b1c"
     },
     {
       "file": "assets/CREDITS.md",
-      "bytes": 1982,
-      "sha256": "9ee280ed90ab9754952ba08b470a68ceb9139ff439ad593f3b7c7d0b4b155a9e"
+      "bytes": 2500,
+      "sha256": "487a4a69556a17664a67b55d6d748f80b95930e9f9836f7532916a20413ae878"
     },
     {
       "file": "assets/audio/CREDITS.md",
@@ -165,6 +170,41 @@
       "file": "assets/demon-actions.webp",
       "bytes": 873232,
       "sha256": "b1f2fc1a0ba1a57554c482796b3026af10e00f87e40ca59896417a73aa6f34e9"
+    },
+    {
+      "file": "assets/pear-shrine.webp",
+      "bytes": 1594100,
+      "sha256": "47a3f6e58d9e560b3a209c1588dba297dfae4a85c2e8a27584b8a4df7402f4db"
+    },
+    {
+      "file": "assets/crystal-base.webp",
+      "bytes": 1350000,
+      "sha256": "6af317e2d1659142e62e4e3457b44443321c374c055b24e075129c0e78ff924f"
+    },
+    {
+      "file": "assets/crystal-runner.webp",
+      "bytes": 1144560,
+      "sha256": "7870374ecc599cfd4bbc1679895f7d57a116faafc7574594e9e317d1ca99b952"
+    },
+    {
+      "file": "assets/crystal-hulk.webp",
+      "bytes": 1764412,
+      "sha256": "213f0dc8d800ce758179a5dcad7544ef78db81807197f25847d3f55a926d0e63"
+    },
+    {
+      "file": "assets/crystal-venom.webp",
+      "bytes": 1454424,
+      "sha256": "c5f76f2f0eeeba97b456e8f6e18f99a6861ae12b3ef3e1a64a2b40d9bd5f3908"
+    },
+    {
+      "file": "assets/crystal-boss.webp",
+      "bytes": 1444352,
+      "sha256": "34e100fc7c8784cd6edded8b9a006ff8e49514351636e37c59c86e2a103e6f5c"
+    },
+    {
+      "file": "assets/crystal-hexqueen.webp",
+      "bytes": 1378282,
+      "sha256": "d213badae1f4fb45b98e89d72881c5134e3e79b57c219473d9ec3b2acd050a9e"
     },
     {
       "file": "assets/walk-base.webp",
