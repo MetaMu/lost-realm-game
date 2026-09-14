@@ -14,7 +14,7 @@
     {
       "file": "index.html",
       "bytes": 8272,
-      "sha256": "8dbea54d6220cf1ec4bf34e823dc3a0560195f1675149487dc4d1db377cb9f63"
+      "sha256": "dc462329470c6301700993e86e4c10414adb4871bfca919efe93fe9239d95135"
     },
     {
       "file": "style.css",
@@ -23,8 +23,8 @@
     },
     {
       "file": "campaign.css",
-      "bytes": 13308,
-      "sha256": "ce71be687a1f0b1d9ab1b767c1c478fda69b71a83861570cc5fc4ee8ed389b7d"
+      "bytes": 17101,
+      "sha256": "c90152214dd8d7eb3d89546b8c24c0339c786a195e86772650568b6156a437c7"
     },
     {
       "file": "core.js",
@@ -33,8 +33,8 @@
     },
     {
       "file": "game.js",
-      "bytes": 33104,
-      "sha256": "eea8b2e31a805a68eec90294e548c0087318d32cadd1b25b044acd2602a20955"
+      "bytes": 35214,
+      "sha256": "4286578329fa534f5b71fc6817fac0c67ececbb83d51307302a28bc7a701ce65"
     },
     {
       "file": "sprite.js",
@@ -78,8 +78,8 @@
     },
     {
       "file": "assets/audio/CREDITS.md",
-      "bytes": 655,
-      "sha256": "b1f5695f16a76121c9729143253a78b2a1f5c5a9af534d09a9102af0a1fe387b"
+      "bytes": 1001,
+      "sha256": "9a56c03773502c79dc68555dea1152d1b573593f92962fffc6ad11cba4b4ec21"
     },
     {
       "file": "assets/audio/electricspell.ogg",
@@ -95,6 +95,11 @@
       "file": "assets/audio/ice/coldsnap.wav",
       "bytes": 467244,
       "sha256": "090977264d65d90a50b04e9f0c1c4e02fb194e5b50d9fe244f0079a4da54158c"
+    },
+    {
+      "file": "assets/audio/knollkeepers-music.mp4",
+      "bytes": 7582370,
+      "sha256": "95de4e4f966ad667a01f775c76e8d58b91cb8a6673f835def1693091a75f2cf0"
     },
     {
       "file": "assets/knowme.webp",

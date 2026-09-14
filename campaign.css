@@ -68,8 +68,31 @@ body:not(.play-view).gnome-drawer-open .roster{display:grid;position:fixed;left:
 #resumeBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #7b602e}
 #resumeBtn:focus-visible{outline:3px solid white;outline-offset:5px}
 .toast{pointer-events:none}
-.toast.wave-celebration{width:min(90vw,480px);white-space:normal;border:1px solid #d8bd75;background:#203b2bf5;color:#fff0bb;text-align:center}
-.wave-celebration small{display:block;margin-top:7px;font-size:12px;line-height:1.4;color:#edf0db}
+.stage-intermission{width:min(760px,94vw);min-height:min(650px,88vh);padding:30px;text-align:center;overflow:hidden;background:linear-gradient(#273f2ddd,#12251bf2),url('assets/forest-expanded.png') center/cover;color:#fff0bc;border:2px solid #c6a85e;box-shadow:0 0 0 6px #172c2199,0 20px 90px #0009}
+.stage-intermission::backdrop{background:#07150ed9;backdrop-filter:blur(8px)}
+.stage-intermission h2{font-size:clamp(30px,6vw,58px);color:#fff0bc;text-shadow:0 3px 0 #182a1e;margin:6px 0 14px}
+.stage-intermission p:not(.eyebrow):not(.loading-caption){color:#d9ddb9;max-width:540px;margin:0 auto 16px}
+.loading-caption{font-size:11px;letter-spacing:3px;color:#ffe49a;margin:-4px 0 16px!important;font-weight:700}.loading-caption:after{content:"";display:block;width:min(300px,70vw);height:6px;margin:14px auto 0;border:1px solid #ffe49a88;background:linear-gradient(90deg,#ffe49a 0 68%,transparent 68%);box-shadow:0 0 12px #ffe49a55;animation:loading-scan 1.8s steps(4,end) infinite}
+@keyframes loading-scan{0%{background-position:-300px 0}100%{background-position:300px 0}}
+.sailor-loading-art{position:relative;height:260px;max-width:300px;margin:0 auto;overflow:hidden;border-bottom:1px solid #efd68a55;background:linear-gradient(180deg,#9a6d7a33,#1a3b2a00)}
+.sailor-loading-art img{height:310px;width:280px;object-fit:contain;filter:drop-shadow(0 14px 10px #0008);animation:sailor-arrive 2.2s cubic-bezier(.2,.8,.2,1) both,sailor-breathe 1.8s ease-in-out 2.2s infinite alternate}
+.sailor-loading-art span{position:absolute;right:24px;top:28px;display:grid;place-items:center;width:48px;height:48px;border:2px solid #fff0bc;border-radius:50% 50% 50% 8px;background:#203b2bf2;color:#ffe297;font:bold 28px Georgia,serif;animation:info-pop .5s 2s both}
+@keyframes sailor-arrive{from{transform:translateX(-160px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes sailor-breathe{from{transform:translateY(0) rotate(-1deg)}to{transform:translateY(-5px) rotate(1deg)}}
+@keyframes info-pop{from{transform:scale(0) rotate(-15deg);opacity:0}to{transform:scale(1) rotate(8deg);opacity:1}}
+.victory-scene{width:min(940px,96vw);min-height:min(690px,90vh);padding:30px;text-align:center;overflow:hidden;background:linear-gradient(#efad78aa 0,#d47b6ecc 34%,#697951dd 64%,#203d2cf5 100%),url('assets/forest-expanded.png') center/cover;border:2px solid #ffe398;box-shadow:0 0 0 6px #e8ba5b55,0 20px 100px #000b}
+.victory-scene::backdrop{background:#12251be6;backdrop-filter:blur(7px)}
+.victory-scene h2{font-size:clamp(28px,6vw,56px);color:#fff2bd;text-shadow:0 3px 0 #593b31;margin:12px 0}
+.victory-scene p{color:#fff0c8!important}
+.victory-cast{position:relative;z-index:2;display:flex;align-items:flex-end;justify-content:center;gap:clamp(2px,2vw,16px);height:220px;margin:4px auto 18px;padding:18px 6px 0;background:linear-gradient(transparent,#234a316e);border-radius:50% 50% 0 0}
+.victory-cast img{width:clamp(54px,10vw,110px);height:200px;object-fit:contain;filter:drop-shadow(0 8px 5px #172a1e99);animation:guardian-celebrate 1.5s ease-in-out var(--delay,0s) infinite alternate}
+.victory-cast img:nth-child(2n){--delay:.18s}.victory-cast img:nth-child(3n){--delay:.36s}.victory-cast img:nth-child(4n){--delay:.54s}
+@keyframes guardian-celebrate{from{transform:translateY(5px) rotate(-2deg)}to{transform:translateY(-9px) rotate(2deg)}}
+.gold-confetti{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.gold-confetti i{position:absolute;left:var(--x);top:-20px;width:9px;height:16px;background:#ffe28a;box-shadow:0 0 8px #fff1a4;transform:rotate(var(--r));animation:confetti-fall 3.6s linear var(--d) infinite}
+.gold-confetti i:nth-child(3n){background:#fff3bd;width:6px;height:11px}.gold-confetti i:nth-child(4n){background:#c99a38;border-radius:50%;width:11px;height:11px}
+@keyframes confetti-fall{to{top:110%;transform:translateX(28px) rotate(calc(var(--r) + 300deg))}}
+@media(prefers-reduced-motion:reduce){.sailor-loading-art img,.sailor-loading-art span,.victory-cast img,.gold-confetti i{animation:none}}
 @media(prefers-reduced-motion:reduce){#resumeBtn{transition:none}}
 /* Focused play keeps the board ratio and its anchored powers intact. */
 .play-bar{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}.play-bar button{min-height:44px;border:1px solid #84966b;border-radius:10px;background:#203b2b;color:#fff4cc;padding:8px 14px;font-weight:600}.play-bar #gnomeDrawerBtn,.play-bar #playResources,.play-bar #playWaveBtn{display:none}
