@@ -3,8 +3,8 @@
   "files": [
     {
       "file": "checkpoint.js",
-      "bytes": 1630,
-      "sha256": "04b035f666004d2a525ccd94a473f030aec5d5f3322a8b84b6feb4c437353d5f"
+      "bytes": 1831,
+      "sha256": "b96071b7b31095456a663ef4df0a7e0979a6b6d0a3664660df609847d23d8257"
     },
     {
       "file": "leaderboard.js",
@@ -13,8 +13,8 @@
     },
     {
       "file": "index.html",
-      "bytes": 8272,
-      "sha256": "dc462329470c6301700993e86e4c10414adb4871bfca919efe93fe9239d95135"
+      "bytes": 8325,
+      "sha256": "23b1501d6165d3990d39b9bb5e85ed0496d776012125ae5fe9cbd190b1bd1617"
     },
     {
       "file": "style.css",
@@ -23,18 +23,18 @@
     },
     {
       "file": "campaign.css",
-      "bytes": 17101,
-      "sha256": "c90152214dd8d7eb3d89546b8c24c0339c786a195e86772650568b6156a437c7"
+      "bytes": 17647,
+      "sha256": "f4b285a173815bc02730d73bb1dd61408db86818abc373902c9c0a353d07e9eb"
     },
     {
       "file": "core.js",
-      "bytes": 14912,
-      "sha256": "3b810d46e24d69142e0d600272428fc3489a65d054a6f57bd4767e29fa8357a1"
+      "bytes": 16154,
+      "sha256": "a8e6d97389f5afe995d20e4675c3d00857368f8588f8eb63c3040f81ccffcc54"
     },
     {
       "file": "game.js",
-      "bytes": 35214,
-      "sha256": "4286578329fa534f5b71fc6817fac0c67ececbb83d51307302a28bc7a701ce65"
+      "bytes": 41016,
+      "sha256": "ce9924fc880b4c4455d30cd231a221bfa70cdd79cb41361b94dde47c59d15bf2"
     },
     {
       "file": "sprite.js",
@@ -43,8 +43,8 @@
     },
     {
       "file": "audio.js",
-      "bytes": 3234,
-      "sha256": "386d127f5a2970c03efd556c1e55c338e0ca602d6fd44ae2ee38b59847a38e8d"
+      "bytes": 3465,
+      "sha256": "572933ee5171e792e9ed2f161eb9599a81b246fb15213745e5415e42b71f6c20"
     },
     {
       "file": "vfx.js",
@@ -52,14 +52,19 @@
       "sha256": "089dc4a94254e83216cb9a15fdc4bd821cc1a2fbc17b5671263f9d0e557c2615"
     },
     {
+      "file": "elemental-vfx.js",
+      "bytes": 2295,
+      "sha256": "af51e778fff2bfa12dff0031ff04885badd4fa5886cc952e55dc57f470d56849"
+    },
+    {
       "file": "campaign.js",
-      "bytes": 9721,
-      "sha256": "1c4786b4d2495817ea9d5086b32ce159cc168b4c38c5f8518354ee3baafdbd30"
+      "bytes": 9719,
+      "sha256": "ddd48a7c2b812bbd611d940ed68fad48eb0df4db52c6dd142c47322b574e417a"
     },
     {
       "file": "campaign-vfx.js",
-      "bytes": 5557,
-      "sha256": "596314e9c78b1b4395877433b91c37f1b5b9f026bc8b84db79e3fccf20f52427"
+      "bytes": 7063,
+      "sha256": "94c37f91d31e3a2c02b81bc89c0c1b1cd930084cd821612ef8858cbb77334d48"
     },
     {
       "file": "bestiary.html",
@@ -78,8 +83,8 @@
     },
     {
       "file": "assets/audio/CREDITS.md",
-      "bytes": 1001,
-      "sha256": "9a56c03773502c79dc68555dea1152d1b573593f92962fffc6ad11cba4b4ec21"
+      "bytes": 1103,
+      "sha256": "8461e3ad6272df6377c7ead7edc95aa7252f3865a9a53b8410285e3b734f31c6"
     },
     {
       "file": "assets/audio/electricspell.ogg",
@@ -182,6 +187,16 @@
       "sha256": "47a3f6e58d9e560b3a209c1588dba297dfae4a85c2e8a27584b8a4df7402f4db"
     },
     {
+      "file": "assets/reno-flowers.webp",
+      "bytes": 1254466,
+      "sha256": "f5195e5a79c2890c2aa0ff0d5346fe49e7b14c8fe5dfdf82816c7d33231aef6c"
+    },
+    {
+      "file": "assets/sailor-loading-sheet.webp",
+      "bytes": 1325944,
+      "sha256": "f034b7f2e9417523fb1b6879223211643725434bd236e332f6c1d7a1f77f058b"
+    },
+    {
       "file": "assets/crystal-base.webp",
       "bytes": 1350000,
       "sha256": "6af317e2d1659142e62e4e3457b44443321c374c055b24e075129c0e78ff924f"
@@ -250,6 +265,16 @@
       "file": "assets/mutant-boss.webp",
       "bytes": 1829420,
       "sha256": "6af1cc0bc75f6abf44f8837d0f61087dfcd2a8e3ca7315bdef97da610e3e8f1a"
+    },
+    {
+      "file": "assets/audio/reno-power.m4a",
+      "bytes": 120213,
+      "sha256": "e85c736773aa367fef5bdaaa267148aa677b95a05e0f8fac558d66db842f5794"
+    },
+    {
+      "file": "assets/audio/knollkeepers-music-mixed.m4a",
+      "bytes": 6888803,
+      "sha256": "d9d3a0bf5ffb660e6c492923e85964b0740d79cf782d86862fb794dddaaaa771"
     }
   ]
 }

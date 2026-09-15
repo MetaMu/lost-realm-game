@@ -1,7 +1,7 @@
 /* Deterministic simulation. Browser and Node share the same rules. */
 (function (root) {
   'use strict';
-  const WIDTH = 1200, HEIGHT = 800, MAX_WAVES = 20, STAGE_WAVES = [0,15,18,20], stageWaves = stage=>STAGE_WAVES[stage]||15;
+  const WIDTH = 1200, HEIGHT = 800, MAX_WAVES = 16, STAGE_WAVES = [0,10,13,16], stageWaves = stage=>STAGE_WAVES[stage]||10;
   const TYPES = {
     knowme: { name: 'KnowME', title: 'The Mindbender', power: 'Frost spores', cost: 85, color: '#80dcd5', range: 185, damage: 8, interval: .95, description: 'An icy cloud of frost spores freezes the flock’s advance. Give your heavy hitters time to do their thing.' },
     host: { name: 'Host', title: 'The Stormcaller', power: 'Chain lightning', cost: 130, color: '#c4a2ff', range: 190, damage: 19, interval: 1.15, description: 'Violet lightning chains through three enemies (four at max level). Connected Hosts within 190 map units form a network: each extra Host adds two targets and 25 jump-range units. First hit is full damage; each hop retains 80% of the previous hit.' },
@@ -9,8 +9,15 @@
     maahaa: { name: 'Maahaa', title: 'The Sunkeeper', power: 'Solar beam', cost: 190, color: '#ffe39a', range: 220, damage: 8, interval: .22, description: 'An armor-piercing sunbeam grows stronger on the same target. Built to bring down the big birds. Level 3 unlocks CLEANSE: remove tower ailments, ward poison for 5 seconds, and heal the five most injured towers by 30% maximum HP, once per level.' },
     fordenad: { name: 'Fordenad', title: 'The Thornwarden', power: 'Venom thorns', cost: 105, color: '#acd17f', range: 205, damage: 8, interval: .72, description: 'Enchanted thorns poison their mark for three seconds. Venom ignores armor and lingers after the shot.' }
   };
-  const PATH = [[-30,355],[65,340],[125,355],[165,400],[210,420],[285,420],[360,391],[402,350],[432,295],[447,258],[486,232],[536,222],[577,229],[621,255],[651,302],[669,356],[692,398],[745,429],[810,450],[871,450],[931,429],[989,388],[1025,342],[1018,296],[1043,266],[1080,251],[1120,253]];
-  const PADS = [[135,285],[280,314],[425,165],[560,157],[533,330],[562,408],[800,228],[900,285],[752,350],[870,363],[360,525],[580,566],[886,546],[1120,365],[290,185],[1035,190]].map(([x,y])=>({x,y}));
+  const FOREST_PATH = [[-30,355],[65,340],[125,355],[165,400],[210,420],[285,420],[360,391],[402,350],[432,295],[447,258],[486,232],[536,222],[577,229],[621,255],[651,302],[669,356],[692,398],[745,429],[810,450],[871,450],[931,429],[989,388],[1025,342],[1018,296],[1043,266],[1080,251],[1120,253]].map(([x,y])=>[x,y+64]);
+  const FOREST_PADS = [[135,285],[280,314],[425,165],[560,157],[533,330],[562,408],[800,228],[900,285],[752,350],[870,363],[360,525],[580,566],[886,546],[1120,365],[290,185],[1035,190]].map(([x,y])=>[x,y<160?y*1.4:y+64]);
+  const ASH_PATH = [[-30,432],[80,432],[138,378],[220,354],[305,354],[360,405],[430,468],[525,468],[585,410],[620,320],[695,294],[780,294],[838,352],[900,430],[990,430],[1050,382],[1128,382]];
+  const ASH_PADS = [[92,300],[190,270],[286,285],[338,530],[430,555],[520,390],[604,240],[710,218],[805,230],[864,520],[965,535],[1055,300],[250,515],[470,285],[735,520],[1015,515]];
+  const CITADEL_PATH = [[-30,530],[80,530],[135,470],[135,310],[220,250],[350,250],[425,320],[425,505],[510,580],[650,580],[735,500],[735,300],[820,215],[960,215],[1045,300],[1128,300]];
+  const CITADEL_PADS = [[82,620],[210,560],[245,190],[350,175],[350,390],[510,665],[610,500],[650,650],[805,170],[900,150],[900,350],[1030,150],[1040,420],[1110,470],[560,170],[1120,200]];
+  const GEOMETRY = {1:{path:FOREST_PATH,pads:FOREST_PADS},2:{path:ASH_PATH,pads:ASH_PADS},3:{path:CITADEL_PATH,pads:CITADEL_PADS}};
+  const PATH=[],PADS=[];let segments=[],pathLength=0;
+  function setGeometry(stage=1){const geometry=GEOMETRY[stage]||GEOMETRY[1];PATH.length=0;PATH.push(...geometry.path.map(p=>[...p]));PADS.length=0;PADS.push(...geometry.pads.map(([x,y])=>({x,y})));segments=PATH.slice(1).map((p,i)=>({a:PATH[i],b:p,length:Math.hypot(p[0]-PATH[i][0],p[1]-PATH[i][1])}));pathLength=segments.reduce((s,p)=>s+p.length,0);}
   const ENEMIES = {
     scout: { name: 'Nibblers', hp: 46, speed: 67, bounty: 10, armor: 0, size: 1, leak: 1 },
     runner: { name: 'Speedpecks', hp: 34, speed: 112, bounty: 10, armor: 0, size: .85, leak: 1 },
@@ -19,11 +26,7 @@
     hexqueen: { name: 'Crystal Hex Queen', hp: 240, speed: 42, bounty: 60, armor: .25, size: 1.4, leak: 3 },
     boss: { name: 'King Nibble', hp: 1350, speed: 32, bounty: 130, armor: .35, size: 1.7, leak: 5 }
   };
-  // Keep terrain, trail and clearings in the same vertically centered projection.
-  for(const p of PATH)p[1]+=64;
-  for(const p of PADS)p.y=p.y<160?p.y*1.4:p.y+64;
-  const segments = PATH.slice(1).map((p,i)=>({a:PATH[i],b:p,length:Math.hypot(p[0]-PATH[i][0],p[1]-PATH[i][1])}));
-  const pathLength = segments.reduce((s,p)=>s+p.length,0);
+  setGeometry(1);
   function position(progress) {
     for (const s of segments) { if (progress <= s.length) {const t=Math.max(0,progress)/s.length;return {x:s.a[0]+(s.b[0]-s.a[0])*t,y:s.a[1]+(s.b[1]-s.a[1])*t, direction:s.b[0]-s.a[0]};} progress-=s.length; }
     return {x:PATH.at(-1)[0],y:PATH.at(-1)[1],direction:1};
@@ -31,8 +34,8 @@
   function wavePlan(n,stage=1) {
     const count = 7+n*2+(stage>=2?8:0), entries=[];
     for(let i=0;i<count;i++) entries.push({at:i*Math.max(.35,1.13-n*.035-(stage>=2?.2:0)),kind:n>=5&&i%5===4?'brute':n>=5&&i%6===3?'venom':n>=3&&i%4===2?'runner':'scout'});
-    if(n===6||n===12||n===stageWaves(stage)||(stage>=2&&n%5===0))entries.push({at:count*.8,kind:'boss'});
-    if(stage===3&&[7,13,19].includes(n))entries.push({at:count*.5,kind:'hexqueen'});
+    if((stage===1?[6,10]:stage===2?[6,10,13]:[6,11,16]).includes(n))entries.push({at:count*.8,kind:'boss'});
+    if(stage===3&&[7,12,15].includes(n))entries.push({at:count*.5,kind:'hexqueen'});
     return entries.map(e=>({...e,at:e.at*1.1*1.15})).sort((a,b)=>a.at-b.at);
   }
   const distance = (a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
@@ -40,9 +43,10 @@
   const upgradeCost = t=>Math.round((TYPES[t.type].upgradeBaseCost||TYPES[t.type].cost)*(.75+t.level*.3)*(t.type==='lady'?.5:1));
   class Game {
     constructor(){this.reset();}
-    reset(){Object.assign(this,{gold:340,lives:20,stage:1,wave:0,kills:0,status:'build',time:0,waveTime:0,towers:[],enemies:[],projectiles:[],effects:[],events:[],queue:[],nextId:1,waveLeaks:0,lastClear:null});}
+    reset(){Object.assign(this,{gold:340,lives:20,stage:1,wave:0,kills:0,status:'build',time:0,waveTime:0,towers:[],enemies:[],projectiles:[],effects:[],events:[],queue:[],nextId:1,waveLeaks:0,lastClear:null});setGeometry(this.stage);}
     emit(type,data={}){this.events.push({type,...data});}
     place(type,pad){
+      setGeometry(this.stage);
       if(!TYPES[type]||(TYPES[type].unlock||1)>this.stage||!Number.isInteger(pad)||!PADS[pad]||this.towers.some(t=>t.pad===pad)||this.gold<TYPES[type].cost||['lost','won'].includes(this.status))return null;
       const t={id:this.nextId++,type,pad,...PADS[pad],level:1,cooldown:.15,spent:TYPES[type].cost,kills:0,damageDealt:0,targetMode:'first',beamTarget:0,beamTime:0,recoil:0};
       t.hp=t.maxHp=100;
@@ -50,8 +54,8 @@
     }
     upgrade(id){const t=this.towers.find(t=>t.id===id);if(!t||t.level>=3||this.gold<upgradeCost(t)||['lost','won'].includes(this.status))return false;const cost=upgradeCost(t);this.gold-=cost;t.spent+=cost;t.level++;t.maxHp+=35;t.hp+=35;this.emit('upgraded',{tower:t});return true;}
     sell(id){const i=this.towers.findIndex(t=>t.id===id);if(i<0||['lost','won'].includes(this.status))return false;this.gold+=Math.floor(this.towers[i].spent*.5);this.towers.splice(i,1);return true;}
-    startWave(){if(this.status!=='build'||this.wave>=stageWaves(this.stage))return false;this.wave++;this.waveTime=0;this.waveLeaks=0;this.queue=wavePlan(this.wave,this.stage);this.status='wave';this.emit('wave');return true;}
-    spawn(kind){const spec=ENEMIES[kind],hp=spec.hp*3*.9*(1+(this.wave-1)*.2)*(this.stage===3?4.95:this.stage===2?1.904:1)*(kind==='boss'?.9:1)*(kind==='boss'?(this.wave===6?.9:this.wave===12?.97:1):1);const e={...spec,bounty:spec.bounty*(this.stage===2?1.2:1)*1.25,mutated:this.stage>=2,crystal:this.stage===3,hexAge:0,nextFrost:10,nextHex:20,speed:spec.speed*(this.stage>=2?1.2:1)/1.15,armor:Math.min(.65,spec.armor+(this.stage>=2?.12:0)),id:this.nextId++,kind,hp,maxHp:hp,progress:0,slowUntil:0,slow:0,poisonUntil:0,poisonDps:0,poisonOwner:null,...position(0)};this.enemies.push(e);return e;}
+    startWave(){if(this.status!=='build'||this.wave>=stageWaves(this.stage))return false;setGeometry(this.stage);this.wave++;this.waveTime=0;this.waveLeaks=0;this.queue=wavePlan(this.wave,this.stage);this.status='wave';this.emit('wave');return true;}
+    spawn(kind){setGeometry(this.stage);const spec=ENEMIES[kind],hp=spec.hp*3*.9*(1+(this.wave-1)*.2)*(this.stage===3?4.95:this.stage===2?1.904:1)*(kind==='boss'?.9:1)*(kind==='boss'?(this.wave===6?.9:this.wave===12?.97:1):1);const e={...spec,bounty:spec.bounty*(this.stage===2?1.2:1)*1.25,mutated:this.stage>=2,crystal:this.stage===3,hexAge:0,nextFrost:10,nextHex:20,speed:spec.speed*(this.stage>=2?1.2:1)/1.15,armor:Math.min(.65,spec.armor+(this.stage>=2?.12:0)),id:this.nextId++,kind,hp,maxHp:hp,progress:0,slowUntil:0,slow:0,poisonUntil:0,poisonDps:0,poisonOwner:null,...position(0)};this.enemies.push(e);return e;}
     hurt(e,amount,owner,pierce=false){
       if(e.hp<=0)return;const damage=amount*(pierce?1:1-e.armor);if(owner)owner.damageDealt+=Math.min(e.hp,damage);e.hp-=damage;
       if(e.hp<=0){this.gold+=e.bounty;this.kills++;if(owner)owner.kills++;this.emit('kill',{x:e.x,y:e.y,bounty:e.bounty});this.effects.push({kind:e.slowUntil>this.time?'shatter':'burst',x:e.x,y:e.y-25,color:'#eac874',life:.45,age:0});}
@@ -129,11 +133,11 @@
       this.enemies=this.enemies.filter(e=>e.hp>0);
       if(!this.queue.length&&!this.enemies.length){
         const milestone=this.stage===1?(this.wave===5?500:this.wave===10?1000:0):0;const bonus=35+this.wave*5+milestone;this.lastClear={wave:this.wave,stage:this.stage,bonus,milestone};this.gold+=bonus;this.projectiles=[];this.effects=[];
-        if(this.wave===stageWaves(this.stage)&&this.stage<3){this.stage++;this.wave=0;this.towers=[];this.lives=Math.min(20,this.lives+8);this.gold+=250;this.status='build';this.emit('stage');}
+        if(this.wave===stageWaves(this.stage)&&this.stage<3){this.stage++;setGeometry(this.stage);this.wave=0;this.towers=[];this.lives=Math.min(20,this.lives+8);this.gold+=250;this.status='build';this.emit('stage');}
         else{this.status=this.wave===stageWaves(this.stage)?'won':'build';this.emit(this.status==='won'?'won':'cleared',{bonus,milestone,perfect:this.waveLeaks===0});}
       }
     }
   }
-  const api={Game,TYPES,PATH,PADS,ENEMIES,WIDTH,HEIGHT,MAX_WAVES,STAGE_WAVES,stageWaves,pathLength,position,wavePlan,stats,upgradeCost};
+  const api={Game,TYPES,ENEMIES,WIDTH,HEIGHT,MAX_WAVES,STAGE_WAVES,stageWaves,setGeometry,position,wavePlan,stats,upgradeCost};Object.defineProperties(api,{PATH:{get:()=>PATH},PADS:{get:()=>PADS},pathLength:{get:()=>pathLength}});
   if(typeof module!=='undefined'&&module.exports)module.exports=api;root.KnollDefense=api;
 })(globalThis);

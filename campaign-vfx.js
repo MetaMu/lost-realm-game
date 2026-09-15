@@ -1,5 +1,11 @@
 /* Local sprite choreography; no flashing full-screen white frames or new songs. */
-function drawRenoVines(c,K,end,vfx){
+function drawRenoFlower(c,x,y,size,angle,rose=false){
+ c.save();c.translate(x,y);c.rotate(angle);c.scale(size,size);
+ // Waru (sea hibiscus): five veined petals, burgundy throat, gold stamens.
+ for(let i=0;i<5;i++){c.save();c.rotate(i*Math.PI*2/5);const petal=c.createLinearGradient(0,0,0,-18);petal.addColorStop(0,'#842845');petal.addColorStop(.28,rose?'#e99086':'#f4b940');petal.addColorStop(1,rose?'#ffd1b2':'#fff2a3');c.fillStyle=petal;c.beginPath();c.moveTo(0,1);c.bezierCurveTo(-14,-5,-15,-19,-2,-20);c.bezierCurveTo(12,-23,17,-7,0,1);c.fill();c.strokeStyle=rose?'#f8b0a099':'#d99a3988';c.lineWidth=.5;for(let j=-1;j<=1;j++){c.beginPath();c.moveTo(0,-2);c.quadraticCurveTo(j*5,-9,j*6,-17);c.stroke();}c.restore();}
+ c.fillStyle='#80223f';c.beginPath();c.arc(0,0,4,0,Math.PI*2);c.fill();c.strokeStyle='#ffe6a0';c.lineWidth=2;c.beginPath();c.moveTo(0,0);c.quadraticCurveTo(3,-4,6,-8);c.stroke();for(let i=0;i<5;i++){c.fillStyle='#ffe77b';c.beginPath();c.arc(6+Math.cos(i)*2,-8+Math.sin(i)*2,1.2,0,Math.PI*2);c.fill();}c.restore();
+}
+function drawRenoVines(c,K,end,vfx,flowers){
  const point=(p,offset=0)=>{const a=K.position(Math.max(0,p)),b=K.position(Math.min(K.pathLength,p+2)),angle=Math.atan2(b.y-a.y,b.x-a.x);return{x:a.x-Math.sin(angle)*offset,y:a.y+Math.cos(angle)*offset,angle};};
  c.save();c.lineCap='round';c.lineJoin='round';
  // Interwoven woody stems, with a grounded shadow and uneven silhouettes.
@@ -17,6 +23,7 @@ function drawRenoVines(c,K,end,vfx){
   if(Math.floor(p/15)%2===0){const side=Math.sin(p)>0?1:-1;c.fillStyle='#56432c';c.beginPath();c.moveTo(-5,side*7);c.quadraticCurveTo(4,side*12,10,side*25*growth);c.quadraticCurveTo(9,side*10,4,side*6);c.closePath();c.fill();c.strokeStyle='#b9a877';c.lineWidth=1;c.beginPath();c.moveTo(-3,side*8);c.lineTo(10,side*25*growth);c.stroke();}
   c.restore();
  }
+ for(let i=0,p=55;p<end;i++,p+=112+(i%3)*17){const a=point(p,(i%2?1:-1)*(18+i%3*5)),growth=Math.min(1,(end-p)/85);if(flowers&&flowers.complete&&flowers.naturalWidth){const cell=flowers.naturalWidth/3,size=(i%3===1?36:48)*growth;c.save();c.translate(a.x,a.y);c.rotate(Math.sin(i*2.3)*.65);c.shadowColor='#101a1690';c.shadowBlur=3;c.shadowOffsetY=2;c.drawImage(flowers,(i%3)*cell,0,cell,flowers.naturalHeight,-size/2,-size/2,size,size);c.restore();}}
  const head=point(end);for(let i=0;i<10;i++){const a=i*2.4,r=12+i*2;c.fillStyle=i%2?'#74604499':'#423926bb';c.beginPath();c.ellipse(head.x+Math.cos(a)*r,head.y+Math.sin(a)*r*.45,3+i%3,2, a,0,7);c.fill();}vfx.glow(head.x,head.y,32,'#9cbb66',.35);c.restore();
 }
 window.drawKnollCampaign=function(c,g,art,vfx,time){
@@ -29,7 +36,7 @@ window.drawKnollCampaign=function(c,g,art,vfx,time){
  for(const a of g.conversions){const t=a.target,o=a.owner,q=1-a.left/2;c.save();c.strokeStyle='#b4ffdf';c.lineWidth=2;c.setLineDash([8,7]);c.lineDashOffset=-time*30;c.beginPath();c.moveTo(o.x,o.y-90);c.quadraticCurveTo((o.x+t.x)/2,t.y-160,t.x,t.y-45);c.stroke();c.setLineDash([]);c.strokeStyle='#bb8dff';c.beginPath();c.ellipse(t.x,t.y,30,12,0,-Math.PI/2,-Math.PI/2+q*Math.PI*2);c.stroke();vfx.glow(t.x,t.y-40,50,'#b69aff',q*.5);c.restore();}
  if(g.ultimate){const u=g.ultimate,t=u.age;c.save();c.fillStyle='#03180ee0';c.fillRect(0,0,1200,70);c.fillRect(0,720,1200,80);
   if(t<2.1){c.fillStyle='#06130b99';c.fillRect(0,70,1200,650);const frame=t<.4?0:t<1.45?1:2;vfx.glow(600,420,240,'#a2dc68',.65);draw(art.reno[frame],600,680,530);c.fillStyle='#f3eccb';c.font='bold 34px Georgia';c.textAlign='center';c.fillText('RENO MO',600,55);c.font='18px Georgia';c.fillText(t<1.45?'The roots remember.':'THORN RECKONING',600,762);}
-  else{const end=Math.min(1,(t-2)/2)*K.pathLength;drawRenoVines(c,K,end,vfx);draw(art.reno[3],1080,735,170);c.fillStyle='#eef7c5';c.font='bold 24px Georgia';c.textAlign='center';c.fillText('THORN RECKONING',600,46);c.font='16px Segoe UI';c.fillText(u.hit.size+' / '+u.targets.length+' enemies hit · 50% health removed',600,765);}
+  else{const end=Math.min(1,(t-2)/2)*K.pathLength;drawRenoVines(c,K,end,vfx,art.flowers);draw(art.reno[3],1080,735,170);c.fillStyle='#eef7c5';c.font='bold 24px Georgia';c.textAlign='center';c.fillText('THORN RECKONING',600,46);c.font='16px Segoe UI';c.fillText(u.hit.size+' / '+u.targets.length+' enemies hit · 50% health removed',600,765);}
   c.restore();
  }
 };

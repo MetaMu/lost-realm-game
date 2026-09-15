@@ -68,14 +68,19 @@ body:not(.play-view).gnome-drawer-open .roster{display:grid;position:fixed;left:
 #resumeBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #7b602e}
 #resumeBtn:focus-visible{outline:3px solid white;outline-offset:5px}
 .toast{pointer-events:none}
-.stage-intermission{width:min(760px,94vw);min-height:min(650px,88vh);padding:30px;text-align:center;overflow:hidden;background:linear-gradient(#273f2ddd,#12251bf2),url('assets/forest-expanded.png') center/cover;color:#fff0bc;border:2px solid #c6a85e;box-shadow:0 0 0 6px #172c2199,0 20px 90px #0009}
+.stage-intermission{width:min(760px,94vw);max-height:90dvh;min-height:min(650px,88vh);padding:24px;text-align:center;overflow-y:auto;background:linear-gradient(#273f2ddd,#12251bf2),url('assets/forest-expanded.png') center/cover;color:#fff0bc;border:2px solid #c6a85e;box-shadow:0 0 0 6px #172c2199,0 20px 90px #0009}
+.sailor-tip{padding:16px;margin:0 auto 12px;border:1px solid #dbc47b;border-radius:14px;background:#14291f;color:#fff0bc;max-width:590px}
+.sailor-tip strong{font-size:11px;letter-spacing:.16em;color:#ffe49b}
+.stage-intermission .sailor-tip p{font-size:14px;line-height:1.5;margin:5px auto 10px;color:#fff6d7}
+.stage-intermission .sailor-tip div:last-child p{margin-bottom:0}
 .stage-intermission::backdrop{background:#07150ed9;backdrop-filter:blur(8px)}
 .stage-intermission h2{font-size:clamp(30px,6vw,58px);color:#fff0bc;text-shadow:0 3px 0 #182a1e;margin:6px 0 14px}
 .stage-intermission p:not(.eyebrow):not(.loading-caption){color:#d9ddb9;max-width:540px;margin:0 auto 16px}
 .loading-caption{font-size:11px;letter-spacing:3px;color:#ffe49a;margin:-4px 0 16px!important;font-weight:700}.loading-caption:after{content:"";display:block;width:min(300px,70vw);height:6px;margin:14px auto 0;border:1px solid #ffe49a88;background:linear-gradient(90deg,#ffe49a 0 68%,transparent 68%);box-shadow:0 0 12px #ffe49a55;animation:loading-scan 1.8s steps(4,end) infinite}
 @keyframes loading-scan{0%{background-position:-300px 0}100%{background-position:300px 0}}
-.sailor-loading-art{position:relative;height:260px;max-width:300px;margin:0 auto;overflow:hidden;border-bottom:1px solid #efd68a55;background:linear-gradient(180deg,#9a6d7a33,#1a3b2a00)}
-.sailor-loading-art img{height:310px;width:280px;object-fit:contain;filter:drop-shadow(0 14px 10px #0008);animation:sailor-arrive 2.2s cubic-bezier(.2,.8,.2,1) both,sailor-breathe 1.8s ease-in-out 2.2s infinite alternate}
+.sailor-loading-art{position:relative;height:280px;width:280px;max-width:100%;margin:0 auto;overflow:hidden;border:0;background:transparent;border-radius:0}
+.sailor-loading-art img{position:absolute;left:0;top:0;height:560px;width:840px;max-width:none;object-fit:fill;animation:sailor-information 5s step-end infinite}
+@keyframes sailor-information{0%{transform:translate(0,0)}8%{transform:translate(-280px,0)}16%{transform:translate(-560px,0)}24%{transform:translate(0,-280px)}32%{transform:translate(-280px,-280px)}42%,100%{transform:translate(-560px,-280px)}}
 .sailor-loading-art span{position:absolute;right:24px;top:28px;display:grid;place-items:center;width:48px;height:48px;border:2px solid #fff0bc;border-radius:50% 50% 50% 8px;background:#203b2bf2;color:#ffe297;font:bold 28px Georgia,serif;animation:info-pop .5s 2s both}
 @keyframes sailor-arrive{from{transform:translateX(-160px);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes sailor-breathe{from{transform:translateY(0) rotate(-1deg)}to{transform:translateY(-5px) rotate(1deg)}}

@@ -1,12 +1,13 @@
 /* Layered elemental Foley and synthesized accents, behind a user gesture. */
 window.KnollAudio=class {
- constructor(){this.enabled=false;this.buffers={};this.last={};this.active=new Set();}
+ constructor(){this.enabled=false;this.buffers={};this.last={};this.active=new Set();this.reno=new Audio('assets/audio/reno-power.m4a');this.reno.preload='auto';this.reno.volume=.5;}
+ playReno(){if(!this.enabled)return;this.reno.currentTime=0;this.reno.play().catch(()=>{});}
  async enable(){
   if(!this.ctx){this.ctx=new AudioContext();this.master=this.ctx.createGain();this.master.gain.value=.65;const limiter=this.ctx.createDynamicsCompressor();limiter.threshold.value=-18;limiter.knee.value=12;limiter.ratio.value=8;this.master.connect(limiter);limiter.connect(this.ctx.destination);this.noise=this.ctx.createBuffer(1,this.ctx.sampleRate,this.ctx.sampleRate);const data=this.noise.getChannelData(0);let seed=17;for(let i=0;i<data.length;i++){seed=(seed*1664525+1013904223)>>>0;data[i]=seed/2147483648-1;}}
   await this.ctx.resume();this.enabled=true;
   if(!this.loading)this.loading=Promise.all(Object.entries({host:'electricspell.ogg',knowme:'ice/coldsnap.wav'}).map(async([key,file])=>{const r=await fetch('assets/audio/'+file);if(!r.ok)throw Error(file);this.buffers[key]=await this.ctx.decodeAudioData(await r.arrayBuffer());})).catch(e=>{this.loading=null;throw e;});await this.loading;
  }
- mute(){this.enabled=false;for(const s of this.active){try{s.stop();}catch{}}this.active.clear();}
+ mute(){this.enabled=false;this.reno.pause();this.reno.currentTime=0;for(const s of this.active){try{s.stop();}catch{}}this.active.clear();}
  voice(source,duration,volume,delay=0,filter=null){if(this.active.size>=12)return;const now=this.ctx.currentTime+delay,gain=this.ctx.createGain();gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(volume,now+.008);gain.gain.exponentialRampToValueAtTime(.0001,now+duration);source.connect(filter||gain);if(filter)filter.connect(gain);gain.connect(this.master);source.start(now);source.stop(now+duration);this.active.add(source);source.onended=()=>{this.active.delete(source);source.disconnect();gain.disconnect();if(filter)filter.disconnect();};}
  tone(start,end,duration,volume,wave='sine',delay=0){const s=this.ctx.createOscillator(),now=this.ctx.currentTime+delay;s.type=wave;s.frequency.setValueAtTime(start,now);s.frequency.exponentialRampToValueAtTime(end,now+duration);this.voice(s,duration,volume,delay);}
  hiss(frequency,duration,volume,delay=0){const s=this.ctx.createBufferSource(),f=this.ctx.createBiquadFilter();s.buffer=this.noise;f.type='bandpass';f.frequency.value=frequency;f.Q.value=1.8;this.voice(s,duration,volume,delay,f);}
