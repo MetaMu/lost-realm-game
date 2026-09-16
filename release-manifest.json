@@ -14,7 +14,7 @@
     {
       "file": "index.html",
       "bytes": 8325,
-      "sha256": "3043696f7f1dcc96f8d58db76c366f3818e414d0243688827a90265b7a82cc0d"
+      "sha256": "3e2ded9eb295e27cb486627a906f26e49fcd3eb3bc766ee7d9dd7a8bb490b9a2"
     },
     {
       "file": "style.css",
@@ -23,18 +23,18 @@
     },
     {
       "file": "campaign.css",
-      "bytes": 17647,
-      "sha256": "f4b285a173815bc02730d73bb1dd61408db86818abc373902c9c0a353d07e9eb"
+      "bytes": 18726,
+      "sha256": "d10f417732ad3ffbb3fa17c18fea00c7171181e59aa4af4ac4b3ddbcb181cb9e"
     },
     {
       "file": "core.js",
-      "bytes": 16434,
-      "sha256": "7e87fc7c095300b76dea7c68a704c88a7ce127c569e14b06670e51e3abaa34da"
+      "bytes": 17078,
+      "sha256": "0a8d60838929314c19ba4858f77fceef825340eaa4e5c8d34780bbceda69e770"
     },
     {
       "file": "game.js",
-      "bytes": 42791,
-      "sha256": "fa0f58d4c11136e0367e8020e59af2eb6e254c5bdf221151182029c366185349"
+      "bytes": 40756,
+      "sha256": "6f1a12dfd8fe334fafb62f323252f8c4ba57e4cb66f0880f9443e90ec7c6a5d6"
     },
     {
       "file": "sprite.js",
@@ -138,13 +138,13 @@
     },
     {
       "file": "assets/forest-burnt.webp",
-      "bytes": 2726744,
-      "sha256": "a0d0dd9882daf77b38b628f0252577a694bfacfb014bfc8386dae7cffe1b42dd"
+      "bytes": 2731630,
+      "sha256": "f7cdf791e7a2868522e366a97396e15c693f61741a57047ab03a80e29e03981b"
     },
     {
       "file": "assets/eclipse-citadel.webp",
-      "bytes": 2837724,
-      "sha256": "88946327af1f6395898d7a5d26d748e8c1a5ee8b7008e3f4ab1e15cdf82b4004"
+      "bytes": 2455202,
+      "sha256": "4dc861be002b5f8cf67ff8e5ef9a0d47b818cb52425b3f7b761b3680d1c074e7"
     },
     {
       "file": "assets/lady.webp",
