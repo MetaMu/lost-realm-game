@@ -2,6 +2,7 @@
 (function (root) {
   'use strict';
   const WIDTH = 1200, HEIGHT = 800, MAX_WAVES = 16, STAGE_WAVES = [0,10,13,16], stageWaves = stage=>STAGE_WAVES[stage]||10;
+  const BALANCE = Object.freeze({venomFirstWave:[0,6,5,4],venomHealth:1.05,venomBounty:.8,waveTiming:1.15});
   const TYPES = {
     knowme: { name: 'KnowME', title: 'The Mindbender', power: 'Frost spores', cost: 85, color: '#80dcd5', range: 185, damage: 8, interval: .95, description: 'An icy cloud of frost spores freezes the flock’s advance. Give your heavy hitters time to do their thing.' },
     host: { name: 'Host', title: 'The Stormcaller', power: 'Chain lightning', cost: 130, color: '#c4a2ff', range: 190, damage: 19, interval: 1.15, description: 'Violet lightning chains through three enemies (four at max level). Connected Hosts within 190 map units form a network: each extra Host adds two targets and 25 jump-range units. First hit is full damage; each hop retains 80% of the previous hit.' },
@@ -32,11 +33,11 @@
     return {x:PATH.at(-1)[0],y:PATH.at(-1)[1],direction:1};
   }
   function wavePlan(n,stage=1) {
-    const count = 7+n*2+(stage>=2?8:0), entries=[];
-    for(let i=0;i<count;i++) entries.push({at:i*Math.max(.35,1.13-n*.035-(stage>=2?.2:0)),kind:n>=5&&i%5===4?'brute':n>=5&&i%6===3?'venom':n>=3&&i%4===2?'runner':'scout'});
+    const count = 7+n*2+(stage>=2?8:0), entries=[],venomWave=BALANCE.venomFirstWave[stage]||BALANCE.venomFirstWave[1];
+    for(let i=0;i<count;i++) entries.push({at:i*Math.max(.35,1.13-n*.035-(stage>=2?.2:0)),kind:n>=5&&i%5===4?'brute':n>=venomWave&&i%6===3?'venom':n>=3&&i%4===2?'runner':'scout'});
     if((stage===1?[6,10]:stage===2?[6,10,13]:[6,11,16]).includes(n))entries.push({at:count*.8,kind:'boss'});
     if(stage===3&&[7,12,15].includes(n))entries.push({at:count*.5,kind:'hexqueen'});
-    return entries.map(e=>({...e,at:e.at*1.1*1.15})).sort((a,b)=>a.at-b.at);
+    return entries.map(e=>({...e,at:e.at*BALANCE.waveTiming})).sort((a,b)=>a.at-b.at);
   }
   const distance = (a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
   const stats = t=>({damage:TYPES[t.type].damage*(1+(t.level-1)*.55),range:TYPES[t.type].range+(t.level-1)*18,interval:TYPES[t.type].interval/((t.type==='lady'||t.type==='phil')?1:1+(t.level-1)*.12)});
@@ -55,7 +56,7 @@
     upgrade(id){const t=this.towers.find(t=>t.id===id);if(!t||t.level>=3||this.gold<upgradeCost(t)||['lost','won'].includes(this.status))return false;const cost=upgradeCost(t);this.gold-=cost;t.spent+=cost;t.level++;t.maxHp+=35;t.hp+=35;this.emit('upgraded',{tower:t});return true;}
     sell(id){const i=this.towers.findIndex(t=>t.id===id);if(i<0||['lost','won'].includes(this.status))return false;this.gold+=Math.floor(this.towers[i].spent*.5);this.towers.splice(i,1);return true;}
     startWave(){if(this.status!=='build'||this.wave>=stageWaves(this.stage))return false;setGeometry(this.stage);this.wave++;this.waveTime=0;this.waveLeaks=0;this.queue=wavePlan(this.wave,this.stage);this.status='wave';this.emit('wave');return true;}
-    spawn(kind){setGeometry(this.stage);const spec=ENEMIES[kind],hp=spec.hp*3*.9*(1+(this.wave-1)*.2)*(this.stage===3?4.95:this.stage===2?1.904:1)*(kind==='boss'?.9:1)*(kind==='boss'?(this.wave===6?.9:this.wave===12?.97:1):1);const e={...spec,bounty:spec.bounty*(this.stage===2?1.2:1)*1.25,mutated:this.stage>=2,crystal:this.stage===3,hexAge:0,nextFrost:10,nextHex:20,speed:spec.speed*(this.stage>=2?1.2:1)/1.15,armor:Math.min(.65,spec.armor+(this.stage>=2?.12:0)),id:this.nextId++,kind,hp,maxHp:hp,progress:0,slowUntil:0,slow:0,poisonUntil:0,poisonDps:0,poisonOwner:null,...position(0)};this.enemies.push(e);return e;}
+    spawn(kind){setGeometry(this.stage);const spec=ENEMIES[kind],hp=spec.hp*3*.9*(1+(this.wave-1)*.2)*(this.stage===3?4.95:this.stage===2?1.904:1)*(kind==='boss'?.9:1)*(kind==='boss'?(this.wave===6?.9:this.wave===12?.97:1):1)*(kind==='venom'?BALANCE.venomHealth:1);const e={...spec,bounty:spec.bounty*(this.stage===2?1.2:1)*1.25*(kind==='venom'?BALANCE.venomBounty:1),mutated:this.stage>=2,crystal:this.stage===3,hexAge:0,nextFrost:10,nextHex:20,speed:spec.speed*(this.stage>=2?1.2:1)/1.15,armor:Math.min(.65,spec.armor+(this.stage>=2?.12:0)),id:this.nextId++,kind,hp,maxHp:hp,progress:0,slowUntil:0,slow:0,poisonUntil:0,poisonDps:0,poisonOwner:null,...position(0)};this.enemies.push(e);return e;}
     hurt(e,amount,owner,pierce=false){
       if(e.hp<=0)return;const damage=amount*(pierce?1:1-e.armor);if(owner)owner.damageDealt+=Math.min(e.hp,damage);e.hp-=damage;
       if(e.hp<=0){this.gold+=e.bounty;this.kills++;if(owner)owner.kills++;this.emit('kill',{x:e.x,y:e.y,bounty:e.bounty});this.effects.push({kind:e.slowUntil>this.time?'shatter':'burst',x:e.x,y:e.y-25,color:'#eac874',life:.45,age:0});}
@@ -138,6 +139,6 @@
       }
     }
   }
-  const api={Game,TYPES,ENEMIES,WIDTH,HEIGHT,MAX_WAVES,STAGE_WAVES,stageWaves,setGeometry,position,wavePlan,stats,upgradeCost};Object.defineProperties(api,{PATH:{get:()=>PATH},PADS:{get:()=>PADS},pathLength:{get:()=>pathLength}});
+  const api={Game,TYPES,ENEMIES,BALANCE,WIDTH,HEIGHT,MAX_WAVES,STAGE_WAVES,stageWaves,setGeometry,position,wavePlan,stats,upgradeCost};Object.defineProperties(api,{PATH:{get:()=>PATH},PADS:{get:()=>PADS},pathLength:{get:()=>pathLength}});
   if(typeof module!=='undefined'&&module.exports)module.exports=api;root.KnollDefense=api;
 })(globalThis);
