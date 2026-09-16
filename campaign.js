@@ -3,7 +3,7 @@
  'use strict';const K=root.KnollDefense||(typeof require==='function'?require('./core.js'):null),Base=K.Game;
  Object.assign(K.TYPES,{
   lady:{name:'Lady Never Scared',title:'The Soul Gardener',power:'Healing · soul conversion',unlock:2,cost:320,color:'#afffe0',range:185,damage:0,interval:15,description:'Heals herself and nearby guardians for 4 HP/sec per level. Waits 15 combat seconds initially and after her demon dies, then channels for 2 seconds to turn a non-boss mutant into an allied demon with reduced health and attack damage, splashing nearby enemies for half damage. One active demon per Lady; demons never stop or slow enemies.'},
-  phil:{name:'Phil Heal',title:'The Neon Shinobi',power:'Shadow uppercut',unlock:3,cost:470,upgradeBaseCost:420,color:'#60eeff',range:260,damage:280,interval:36,description:'Every 36 combat seconds, one neon shadow clone uppercuts up to three foes. Armor-piercing hits stun briefly. Clones never overlap.'}
+  phil:{name:'Phil Heal',title:'The Neon Shinobi',power:'Shadow uppercut',unlock:3,cost:470,upgradeBaseCost:420,color:'#60eeff',range:260,damage:280,interval:18,description:'Every 18 combat seconds, one neon shadow clone uppercuts up to three foes. Armor-piercing hits stun briefly. Clones never overlap.'}
  });
  const baseStats=K.stats;K.stats=t=>{const s=baseStats(t);if(t.type==='lady'||t.type==='phil')s.interval=K.TYPES[t.type].interval;return s;};
  const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);

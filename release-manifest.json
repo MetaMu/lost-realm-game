@@ -14,7 +14,7 @@
     {
       "file": "index.html",
       "bytes": 8325,
-      "sha256": "3e2ded9eb295e27cb486627a906f26e49fcd3eb3bc766ee7d9dd7a8bb490b9a2"
+      "sha256": "a594745ce0e95244ac5ee92e03d7badeb5ef29f00d455a31be18c4d449cfe9c2"
     },
     {
       "file": "style.css",
@@ -59,7 +59,7 @@
     {
       "file": "campaign.js",
       "bytes": 9719,
-      "sha256": "ddd48a7c2b812bbd611d940ed68fad48eb0df4db52c6dd142c47322b574e417a"
+      "sha256": "2c9a6dd5272b67dcb4340f1c6206e3bf725b650927b69ddfa5320ce1ff9749fa"
     },
     {
       "file": "campaign-vfx.js",
