@@ -83,8 +83,8 @@
     },
     {
       "file": "assets/audio/CREDITS.md",
-      "bytes": 1103,
-      "sha256": "8461e3ad6272df6377c7ead7edc95aa7252f3865a9a53b8410285e3b734f31c6"
+      "bytes": 1438,
+      "sha256": "f1bdd0d8103ab3cf75772d93aa7614bb7fc274454e067d1cce628007f30d71e7"
     },
     {
       "file": "assets/audio/electricspell.ogg",
@@ -268,8 +268,8 @@
     },
     {
       "file": "assets/audio/reno-power.m4a",
-      "bytes": 120213,
-      "sha256": "e85c736773aa367fef5bdaaa267148aa677b95a05e0f8fac558d66db842f5794"
+      "bytes": 118326,
+      "sha256": "f5ad7c21805bd980ae9d1ddf26917158670bbc324ccf7bbb457f7ddf81a4545b"
     },
     {
       "file": "assets/audio/knollkeepers-music-mixed.m4a",
