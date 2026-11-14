@@ -2,6 +2,11 @@
   "version": "1.2.0-beta.2",
   "files": [
     {
+      "file": "tutorial.js",
+      "bytes": 5388,
+      "sha256": "e0e467de658b9c9c3fcf9e6f608ae1031fa0c57a03b0d765d4d54743ed624951"
+    },
+    {
       "file": "checkpoint.js",
       "bytes": 1831,
       "sha256": "b96071b7b31095456a663ef4df0a7e0979a6b6d0a3664660df609847d23d8257"
@@ -13,8 +18,8 @@
     },
     {
       "file": "index.html",
-      "bytes": 8325,
-      "sha256": "1b6bc6b4e4e5664b32858a442f25569b646b6f3869fe303eaee68859d6cdc153"
+      "bytes": 8375,
+      "sha256": "23193c6e9ecd10aa123970fdfdf83a1664e9af5a9bf8eed2390c7289c34afdc8"
     },
     {
       "file": "style.css",
@@ -23,23 +28,23 @@
     },
     {
       "file": "campaign.css",
-      "bytes": 18726,
-      "sha256": "d10f417732ad3ffbb3fa17c18fea00c7171181e59aa4af4ac4b3ddbcb181cb9e"
+      "bytes": 20616,
+      "sha256": "54368a8abdf98faab014f8ef8a95263baf6a5677415dec3ac2cf5030f4e9d6be"
     },
     {
       "file": "core.js",
       "bytes": 17078,
-      "sha256": "0a8d60838929314c19ba4858f77fceef825340eaa4e5c8d34780bbceda69e770"
+      "sha256": "e1ad059721a28d89af4ce874888404831f4012b9fab1c3f63c41691dbbb59804"
     },
     {
       "file": "game.js",
-      "bytes": 40756,
-      "sha256": "6f1a12dfd8fe334fafb62f323252f8c4ba57e4cb66f0880f9443e90ec7c6a5d6"
+      "bytes": 40866,
+      "sha256": "3f04940e1184a3321aee50fe4a90fc72ce6d1b6f10f14724b0ad6a7b74278394"
     },
     {
       "file": "sprite.js",
-      "bytes": 1546,
-      "sha256": "9069f31f273f8631babaec8ba6ee2e3e0ad803986f8b0cd76b8b2e038a29904c"
+      "bytes": 1638,
+      "sha256": "a00d6efa0c1fb713389c14b31a83552e39c73ea321b1fb93a602017f0c3408d3"
     },
     {
       "file": "audio.js",
@@ -58,13 +63,13 @@
     },
     {
       "file": "campaign.js",
-      "bytes": 9859,
-      "sha256": "69321135daded1f079ff4135472a01f068e1d0b1a2300f4078c40f8c476fafde"
+      "bytes": 10057,
+      "sha256": "ad2b286e95d96cd2ec60b47719cb8ac7cb8d18b1ed0ddbe160b6d79d7fe5bbfd"
     },
     {
       "file": "campaign-vfx.js",
-      "bytes": 8177,
-      "sha256": "86f7349a4aa51ffa80057e87cff7273427c39ca242f3d00c53e036bc26cef64d"
+      "bytes": 8176,
+      "sha256": "4233329589316ede6fcea47652e82925fd0b1afaa08602798899e62b3f4e61af"
     },
     {
       "file": "bestiary.html",
