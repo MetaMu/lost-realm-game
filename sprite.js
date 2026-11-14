@@ -5,7 +5,12 @@ window.loadCharacter = function(src) {
     im.onload=()=>{
       const c=document.createElement('canvas');c.width=im.width;c.height=im.height;
       const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(im,0,0);
-      const pixels=x.getImageData(0,0,c.width,c.height),d=pixels.data;
+      let pixels;
+      try { pixels=x.getImageData(0,0,c.width,c.height); }
+      catch(error) {
+        reject(error);return;
+      }
+      const d=pixels.data;
       for(let i=0;i<d.length;i+=4){
         const excess=Math.min(d[i],d[i+2])-d[i+1];
         if(excess>65&&d[i]>130&&d[i+2]>100){d[i+3]*=1-Math.min(1,(excess-65)/65);}
